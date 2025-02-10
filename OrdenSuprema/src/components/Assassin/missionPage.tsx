@@ -5,11 +5,14 @@ import { Table } from '../../elements/table.tsx'
 export const MissionPage = () => {
   return (
     <>
+ 
       < NavBar />
-      <div className='absolute left-185 top-40'>
-        <h1 className='font-bold'> Misiones Publicadas </h1> 
+
+      <div className='relative flex justify-content-center overflow-x-auto'>
+        {/* <h1 className='font-bold'> Misiones Publicadas </h1>  */}
+        {/* < Table /> */}
       </div>
-      < Table />
+      
     </>
   );
 }
