@@ -1,0 +1,35 @@
+// routes.ts
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { Login } from '../components/LoginForm.tsx';
+import { FormAsesino } from '../components/HighTable/FormAsesino.tsx';
+import { HighProfile } from '../components/HighTable/HighProfile.tsx';
+import { History } from '../components/HighTable/History.tsx';
+
+const RoutesConfig = createBrowserRouter([
+  {
+    path: "/",
+    element: <Login />, 
+    children: [
+      {
+        path: "/loginForm",
+        element: <Login />,  
+      },
+      {
+        path: "/formAssassin",
+        element: <FormAsesino />,  
+      },
+      {
+        path: "/highProfile",
+        element: <HighProfile />,
+      },
+      {
+        path: "/history",
+        element: <History />,
+      }
+    ],
+  },
+]);
+
+export const RoutesComponent = () => (
+  <RouterProvider router={RoutesConfig} />  
+);
