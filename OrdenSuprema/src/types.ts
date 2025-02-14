@@ -1,11 +1,13 @@
 // Definir el tipo de ubicación
-interface Location {
+export interface Location {
     lat: number;
     lng: number;
   }
   
 // Definir el tipo de usuario
-interface User {
+export interface User {
     name: string;
     location: Location;
+    range: 'orden' | 'asesino';
+    money: number;
 }
