@@ -6,19 +6,15 @@ interface MapComponentProps {
 
 export const MapComponent = ({ location }: MapComponentProps) => {
 
-  return (
-    <div className="flex flex-col items-center gap-4">
-      <iframe
-        
-        //key={`${location.lat},${location.lng}`} // Forzar recarga del iframe
-        width="600"
-        height="450"
-
-        //loading="lazy"
-        //allowFullScreen
-        //referrerPolicy="no-referrer-when-downgrade"
-        src={`https://www.google.com/maps?q=${location.lat},${location.lng}&output=embed`}
-      ></iframe>
-    </div>
-  );
+return (
+      <div className="w-full px-4 mb-8 mt-8 flex justify-center">
+        <div className="relative w-full max-w-9/10 aspect-[21/9]">
+          <iframe
+            key={`${location.lat},${location.lng}`} // Force reload on location change
+            className="absolute top-0 left-0 w-full h-full rounded-lg shadow-lg"
+            src={`https://www.google.com/maps?q=${location.lat},${location.lng}&output=embed`}
+          ></iframe>
+        </div>
+      </div>
+    );
 }

@@ -23,14 +23,11 @@ const pickUser = (location: Location) => {
 }
 
     return (
-        <>
-        <NavBar/>
-        <div className="flex flex-col items-center gap-4 p-6">
-            <h1 className="text-2xl font-bold">Ubicar Asesino</h1>
+        <div className="w-screen bg-transparent">
+            <NavBar/>
+
             <LocationPaywall users={users} onSelectLocation={pickUser}/>
             {selectedLoc !== null && <MapComponent location={selectedLoc} />}
-            
         </div>
-        </>
     )
 }
