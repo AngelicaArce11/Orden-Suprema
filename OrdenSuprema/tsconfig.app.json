@@ -22,5 +22,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src", "src/components/Assassin/missionPage.tsx"]
+  "include": ["src", "src/components/Assassin/MissionPage.tsx"]
 }

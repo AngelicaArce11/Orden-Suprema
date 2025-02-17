@@ -22,7 +22,7 @@ export const LocationPaywall = ({ users, onSelectLocation }: LocationPaywallProp
         onSelectLocation(selectedUser.location)
     }
 
-  return (
+    return (
     <div>
         <p className="text-lg">Elige al asesino que quieras ubicar:</p>
 

@@ -1,10 +1,10 @@
 import { MapComponent } from "../../elements/Map";
-import { NavBar } from "../../elements/navBar";
+import { NavBar } from "../../elements/NavBar";
 import { User } from "../../types";
 import { Location} from "../../types";
 import { useState } from "react";
 import { LocationPaywall } from "./LocationPaywall";
-  
+
 // Crear la lista de usuarios
 const users: User[] = [
     { name: "Jack el Destripador", location: { lat: 48.8566, lng: 2.3522 }, range: 'asesino', money: 500},
@@ -12,7 +12,7 @@ const users: User[] = [
     { name: "Minero", location: { lat: 6.274951563732976, lng: -75.59143037110933 }, range: 'asesino', money: 500 },
     { name: "Ghostface", location: { lat: 35.6895, lng: 139.6917 }, range: 'asesino', money: 500 },
 ];
-  
+
 
 
 export const LocateAssassins = () => {
