@@ -23,7 +23,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/formAssassin" element={<FormAsesino />} />
         <Route path="/highProfile" element={<HighProfile />} />
         <Route path="/history" element={<History />} />
-        <Route path="/missionsAssasin" element={<MissionPage />} />
+        <Route path="/missionsAssassin" element={<MissionPage />} />
         <Route path="/postMission" element={<MissionPostPage />} />
         <Route path="/changeCoins" element={<ChangeCoinsPage />} />
         <Route path="/cancelMission" element={<CancelMissionPage />} />
