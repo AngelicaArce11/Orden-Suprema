@@ -15,7 +15,7 @@ export const Login=()=> {
                     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
 
                         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                            <img alt="Your Company" src={imagen1} className="mx-auto h-10 w-auto"/>
+                            <img alt="The High Table" src={imagen1} className="mx-auto h-10 w-auto"/>
                             <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Inicio de sesión</h2>
                             <h3 className="text-center font-bold tracking-tight text-gray-400">Al mundo Oscuro</h3>
                         </div>

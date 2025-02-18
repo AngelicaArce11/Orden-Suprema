@@ -9,28 +9,28 @@ export const FormAsesino=()=> {
         </div> 
 
         <div className="relative flex items-center justify-center min-h-screen">
-          <form className="max-w-sm w-full bg-gray-100 dark:bg-gray-900 p-10 rounded-lg shadow-md">
+          <form className="max-w-lg sm:max-w-xl md:max-w-2xl lg:max-w-4xl w-full bg-slate-900 dark:bg-gray-900 p-13 rounded-lg shadow-md">
 
-            <h2 className="mt-10 mb-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Registrar Asesino</h2>
+            <h2 className=" mb-10 text-center text-2xl/9 font-bold tracking-tight text-white">Registrar Asesino</h2>
             <div className="mb-7">
-              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              <label className="block mb-2 text-sm font-medium text-gray-50 dark:text-white">
                 Nombre
               </label>
-              <input  className="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light"  required />
+              <input  className="shadow-xs bg-gray-700 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light"  required />
             </div>
 
             <div className="mb-7">
-              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              <label className="block mb-2 text-sm font-medium text-gray-50 dark:text-white">
                 ID
               </label>
-              <input type='number' className="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" required />
+              <input type='number' className="shadow-xs bg-gray-700  text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" required />
             </div>
 
             <div className="mb-7">
-                <label  htmlFor="email"  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <label  htmlFor="email"  className="block mb-2 text-sm font-medium text-gray-50 dark:text-white">
                   Correo Electrónico
                 </label>
-                <input type="email" id="email" className=" shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" required />
+                <input type="email" id="email" className=" shadow-xs bg-gray-700  text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" required />
             </div>
 
             <div className="w-full flex justify-center items-center mt-10">

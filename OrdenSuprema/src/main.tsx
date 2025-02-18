@@ -12,11 +12,9 @@ import { History } from './components/HighTable/History.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-
-    <MissionPage />
-
+    {/* <MissionPage /> */}
     <BrowserRouter> 
-    {/* <Navbar />  */}
+    
       <Routes>
         <Route path="/" />
         <Route path="/loginForm" element={<Login />} />
