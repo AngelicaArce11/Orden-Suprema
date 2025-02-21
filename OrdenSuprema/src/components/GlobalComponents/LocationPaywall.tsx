@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { User, Location } from "../../types";
-import { Pay } from "../Assassin/pay";
+import { Pay } from "../Assassin/Pay";
 
 interface LocationPaywallProps {
     users: User[];
