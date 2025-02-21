@@ -1,30 +1,42 @@
+import React, { useState } from "react";
 
-const asesinos = [
-  { nombreObj: "John Doe", descripcion: "sjkdkbkfbskjdf sdfnsdjfksdfkjnsdkfnksjdnfsdfsdfsdfAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA dfnsdnfsdnfknsdkfjnkjsdfnkjdsnfkjsdnfkj", estado: "Completa" },
-  { nombreObj: "Jane Doe", descripcion: "sjkdkbkfbskjdf sdfnsdjfksdfkjnsdkfnksjdnfsdfsdfsdf dfnsdnfsdnfknsdkfjnkjsdfnkjdsnfkjsdnfkj", estado: "Completa" },
-  { nombreObj: "John Smith", descripcion: "sjkdkbkfbskjdf sdfnsdjfksdfkjnsdkfnksjdnfsdfsdfsdf dfnsdnfsdnfknsdkfjnkjsdfnkjdsnfkjsdnfkj-01-03", estado: "En progreso" },
-]
+interface Asesino {
+  nombreObj: string;
+  descripcion: string;
+  estado: string;
+  pago: number;
+}
 
 
-function AsesinoRow({ asesino }: { asesino: { nombreObj: string; descripcion: string; estado: string } }) {
+const asesinos: Asesino[] = [
+  { nombreObj: "John Doe", descripcion: "jdneknejdend", estado: "Completa", pago: 23 },
+  { nombreObj: "Jane Doe", descripcion: "behbfeek fkef", estado: "En progreso", pago: 19 },
+  { nombreObj: "John Smith", descripcion: "dhbjhejhefb", estado: "Pendiente", pago: 30 },
+
+];
+
+function AsesinoRow({ asesino }: { asesino: Asesino }) {
   return (
-    <tr className="hover:bg-gray-100">
-      <td className="px-6 py-4 text-gray-800">{asesino.nombreObj}</td>
-      <td className="px-6 py-4 text-gray-800 ">{asesino.descripcion}</td>
-      <td className="px-6 py-4 text-gray-800">{asesino.estado}</td>
+    <tr className="hover:bg-gray-600 bg-gray-700 ">
+      <td className="px-6 py-4 text-white font-bold">{asesino.nombreObj}</td>
+      <td className="px-6 py-4 text-gray-200 ">{asesino.descripcion}</td>
+      <td className="px-6 py-4 text-white">{asesino.estado}</td>
+      <td className="px-6 py-4 text-white">{asesino.pago}</td>
     </tr>
   );
 }
 
-function AsesinosTable({ asesinos }: { asesinos: { nombreObj: string; descripcion: string; estado: string }[] }) {
+function AsesinosTable({ asesinos }: { asesinos: Asesino[] }) {
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full max-w-3xl mx-auto border border-gray-300 shadow-md rounded-lg overflow-hidden">
-        <thead className="bg-gray-800 text-white">
+    // <div className="overflow-x-auto">
+    <div className=" w-full max-w-5xl overflow-y-auto mt-4 ">
+      <table className="w-full border border-gray-300 shadow-md rounded-lg overflow-hidden">
+        <thead className="bg-gray-800 text-white sticky top-0">
           <tr>
-            <th className="px-6 py-3 text-left text-sm font-semibold uppercase">NombreObj</th>
-            <th className="px-6 py-3 text-left text-sm font-semibold uppercase">descripcion</th>
-            <th className="px-6 py-3 text-left text-sm font-semibold uppercase">estado</th>
+            <th className="px-6 py-3 text-left text-sm font-semibold sm:text-base">NOMBRE DEL OBJETIVO</th>
+            <th className="px-6 py-3 text-left text-sm font-semibold sm:text-base">DESCRIPCIÓN</th>
+            <th className="px-6 py-3 text-left text-sm font-semibold sm:text-base">ESTADO</th>
+            <th className="px-6 py-3 text-left text-sm font-semibold sm:text-base">PAGO</th>
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-300">
@@ -37,25 +49,35 @@ function AsesinosTable({ asesinos }: { asesinos: { nombreObj: string; descripcio
   );
 }
 
-function SearchAsesino() {
+function SearchAsesino({ search, setSearch }: { search: string; setSearch: React.Dispatch<React.SetStateAction<string>> }) {
   return (
     <input
       type="text"
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
       placeholder="Buscar asesino"
-      className="border border-gray-300 rounded-md px-4 py-2 w-full max-w-3xl"
+      className="border border-gray-300 rounded-md px-4 py-2 w-full mt-30 max-w-3xl"
     />
   );
 }
 
-
-
 export const History = () => {
+  const [search, setSearch] = useState("");
+  const [filteredAsesinos, setFilteredAsesinos] = useState(asesinos);
+
+  React.useEffect(() => {
+    setFilteredAsesinos(
+      asesinos.filter((asesino) =>
+        asesino.nombreObj.toLowerCase().includes(search.toLowerCase())
+      )
+    );
+  }, [search]);
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-10"> 
-      <div className="flex flex-col items-center justify-start min-h-screen p-10 mt-30">
-        <SearchAsesino  />
-        <AsesinosTable asesinos={asesinos}/>
-      </div>
-    </div> 
+    <div className="h-screen w-screen bg-gray-600 flex flex-col items-center justify-center p-4">
+      <SearchAsesino search={search} setSearch={setSearch} />
+      <AsesinosTable asesinos={filteredAsesinos} />
+    </div>
   );
 };
+

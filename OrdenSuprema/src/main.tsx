@@ -16,7 +16,7 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
 
     <BrowserRouter> 
-    {/* <Navbar />  */}
+    
       <Routes>
         <Route path="/" />
         <Route path="/loginForm" element={<Login />} />
