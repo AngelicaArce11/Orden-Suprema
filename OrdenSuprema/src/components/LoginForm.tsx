@@ -11,7 +11,7 @@ export const Login=()=> {
             </div> 
             
             <div className="relative flex items-center justify-center md:justify-end px-20 min-h-screen">
-                <div className="max-w-sm w-full bg-gray-200 dark:bg-gray-900 p-6 rounded-lg shadow-md">
+                <div className="max-w-sm w-full bg-gray-200  p-6 rounded-lg shadow-md">
                     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
 
                         <div className="sm:mx-auto sm:w-full sm:max-w-sm">

@@ -11,6 +11,7 @@ import { History } from './components/HighTable/History.tsx'
 import { MissionPostPage } from './components/GlobalComponents/PostMissionPage.tsx';
 import { ChangeCoinsPage } from './components/Assassin/ChangeCoinsPage.tsx';
 import { CancelMissionPage } from './components/GlobalComponents/CancelMissionPage.tsx';
+import { DebtsAssassin } from './components/HighTable/DebtsAssassin.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -27,7 +28,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/postMission" element={<MissionPostPage />} />
         <Route path="/changeCoins" element={<ChangeCoinsPage />} />
         <Route path="/cancelMission" element={<CancelMissionPage />} />
-
+        <Route path="/debtsAssassin" element={<DebtsAssassin/>} />
       </Routes>
 
     </BrowserRouter>
