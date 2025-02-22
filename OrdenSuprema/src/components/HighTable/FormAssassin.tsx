@@ -1,6 +1,6 @@
 import imagen from '../../assets/img/RegAssassin.jpg'
 
-export const FormAsesino=()=> {
+export const FormAssassin=()=> {
     return (
     <>
       <div className="relative w-screen h-screen group">

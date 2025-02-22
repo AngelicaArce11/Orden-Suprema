@@ -1,7 +1,7 @@
 // routes.ts
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Login } from '../components/LoginForm.tsx';
-import { FormAsesino } from '../components/HighTable/FormAsesino.tsx';
+import { FormAssassin } from '../components/HighTable/FormAssassin.tsx';
 import { HighProfile } from '../components/HighTable/HighProfile.tsx';
 import { History } from '../components/HighTable/History.tsx';
 
@@ -16,7 +16,7 @@ const RoutesConfig = createBrowserRouter([
       },
       {
         path: "/formAssassin",
-        element: <FormAsesino />,  
+        element: <FormAssassin />,  
       },
       {
         path: "/highProfile",

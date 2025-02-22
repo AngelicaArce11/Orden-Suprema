@@ -6,9 +6,9 @@ import { Table, Button, Pagination } from "flowbite-react";
 interface TableElementProps {
     header: string[];
     data: object[];
-    nameButton: string
-    colorButton: string
-    onClick : () => void;
+    nameButton?: string
+    colorButton?: string
+    onClick? : () => void;
 }
 
 export const TableElement = ({header, data, nameButton, colorButton, onClick} : TableElementProps) => {
@@ -27,10 +27,10 @@ export const TableElement = ({header, data, nameButton, colorButton, onClick} : 
 
     return (
         <> 
-            <Table hoverable className='table-fixed'>
+            <Table hoverable className='table-fixed '>
                 <Table.Head>
                     { header.map((value) => (
-                        <Table.HeadCell className='break-words'>{value}</Table.HeadCell>
+                        <Table.HeadCell className='break-words p-2'>{value}</Table.HeadCell>
                     ))}
                 </Table.Head>
                 <Table.Body className='divide-y'>
@@ -41,24 +41,24 @@ export const TableElement = ({header, data, nameButton, colorButton, onClick} : 
                         const entries = Object.entries(row);
                     
                         return (
-                            <Table.Row key={rowIndex} className='bg-gray-800'>
+                            <Table.Row key={rowIndex} className='bg-gray-800 '>
                                 {/* Iteramos por cada celda */}
                                 {entries.map(([key, value], cellIndex: number) => 
                                     // Si es la primera celda, queremos que la letra sea en negrilla
                                     cellIndex === 0 ? (
-                                        <Table.Cell className='font-medium text-white break-words text-wrap'>{value}</Table.Cell>
+                                        <Table.Cell className='font-medium text-white break-words text-wrap p-2'>{value}</Table.Cell>
                                     ) : (
                                         // Si la tabla tiene botón
-                                        cellIndex === entries.length - 1 && nameButton !== null ? (
+                                        cellIndex === entries.length - 1 && nameButton !== undefined ? (
                                             <>
-                                                <Table.Cell className='text-gray break-words text-wrap'>{value}</Table.Cell>
-                                                <Table.Cell className='text-center flex justify-center items-center'>
+                                                <Table.Cell className='text-gray break-words text-wrap p-2'>{value}</Table.Cell>
+                                                <Table.Cell className='text-center flex justify-center items-center '>
                                                     <Button outline size='md' gradientDuoTone={colorButton} onClick={onClick}>  {nameButton} </Button>
                                                 </Table.Cell>
                                             </>
                                         ) : (
                                             // Si la tabla no tiene botón
-                                            <Table.Cell className='text-gray break-words text-wrap'>{value}</Table.Cell>
+                                            <Table.Cell className='text-gray break-words text-wrap p-2'>{value}</Table.Cell>
                                         )
                                     )
                                 )}
