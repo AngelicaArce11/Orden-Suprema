@@ -47,18 +47,20 @@ export const History = () => {
 
       {/* Titulo */}
       <div className='flex justify-center items-center mt-30'>
-          <h5 className='text-white font-bold text-2xl lg:text-5xl'> Historial Asesinos </h5>
-          
+          <h5 className='text-white font-bold text-2xl lg:text-5xl'> Historial de Asesinos </h5>
+      </div>
+      <div className='flex justify-center items-center mt-5'>
+        <h5 className='text-white font-bold text-1xl lg:text-3xl'> Misiones </h5>
       </div>
       
       {/* Barra de búsqueda */}
-      <div className='flex justify-center items-center mt-2 sm:px-10'>
+      <div className='flex justify-center items-center mt-2 pr-4 pl-4 sm:px-10'>
         <SearchAsesino search={search} setSearch={setSearch} />
       </div>
 
 
       {/* Tabla y barra de busqueda con el Historial de los asesinos */}
-      <div className='w-full pt-15 pr-4 pl-4 px-2 sm:px-30  '>        
+      <div className='w-full pt-15 pr-4 pl-4 px-2 sm:px-15  '>        
         <TableElement header={['Nombre del objetivo', 'Descripción', 'Estado', 'Pago']} data={filteredAssassin}  ></TableElement>
       </div>
       
