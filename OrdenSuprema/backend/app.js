@@ -1,4 +1,5 @@
 import express from 'express';
+import {corsMiddleware} from './middlewares/cors.js'
 
 const app = express();
 
@@ -6,6 +7,8 @@ app.get('/', (req, res) =>{
     res.send('holi')
 })
 
+
+app.use(corsMiddleware());
 
 // Puertos definidos para correr el servidor de express
 const port = process.env.PORT || 3001
