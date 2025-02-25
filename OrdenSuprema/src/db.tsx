@@ -9,6 +9,7 @@ export const users: User[] = [
 
 export const missions: Mission[] = [
     {
+      id: 1,
       img: "https://lh3.googleusercontent.com/a-/ALV-UjXyVUB3FmxSYINypqpldlPt1uJTVxrBpLmdgsNLCFk_j-vfyew=s240-p-k-rw-no",
       targetName: "Sofia Laurent",
       assassinName: "Ghost Whisper",
@@ -17,6 +18,7 @@ export const missions: Mission[] = [
       isCompleted: true
     },
     {
+      id: 2,
       img: "https://lh3.googleusercontent.com/a-/ALV-UjXhCr_KtxpZDEH1kxbSpMNzPPfcNTBLdK4E4-xlBZjSRQ7I7Mg=s240-p-k-rw-no",
       targetName: "John Doe",
       assassinName: "Shadow Reaper",
@@ -25,6 +27,7 @@ export const missions: Mission[] = [
       isCompleted: false
     },
     {
+      id: 3,
       img: "https://lh3.googleusercontent.com/a-/ALV-UjUTVL87mIVrOCg_ohZ5oGkJtwMI0HMNBhZNAcr8lyq6Ai6hPJpD=s240-p-k-rw-no",
       targetName: "Elena Vasquez",
       assassinName: "Night Phantom",
@@ -33,6 +36,7 @@ export const missions: Mission[] = [
       isCompleted: null // Estado desconocido
     },
     {
+      id: 4,
       img: "https://lh3.googleusercontent.com/a-/ALV-UjVSV0QEwgeg2SdBEiOOMaZXqgIlwq4f7Shk2IJVBk9DkFRMFFW9=s240-p-k-rw-no",
       targetName: "Victor Kruger",
       assassinName: "Silent Viper",
@@ -41,6 +45,7 @@ export const missions: Mission[] = [
       isCompleted: true
     },
     {
+      id: 5,
       img: "https://lh3.googleusercontent.com/a/ACg8ocI4YYLooqPjmwFjFplURFCkZUIwMieqIoD-E0WLlnVQ6sHwwWqs=s240-p-k-rw-no",
       targetName: "Lucas Moretti",
       assassinName: "Dark Raven",

@@ -14,6 +14,7 @@ export interface User {
 
 //Definir el tipo de mision
 export interface Mission {
+  id: number
   img: string
   targetName: string
   assassinName: string

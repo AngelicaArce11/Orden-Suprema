@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { User, Location } from "../../types";
 import { Pay } from "../Assassin/Pay";
 
@@ -13,14 +13,22 @@ export const LocationPaywall = ({ users, onSelectLocation }: LocationPaywallProp
     const [isPayed, setisPayed] = useState<boolean|null>(null);
     const [selectedUser, setSelectedUser] = useState<User|null>(null);
     const payValue = 49;
+    const targetRef = useRef<HTMLDivElement>(null);
 
     const handleClick1 = (user:User) => {
-        setisPayed(false)
-        setSelectedUser(user)
+        setisPayed(false);
+        setSelectedUser(user);
     };
+
     useEffect(() => {
         if (isPayed && selectedUser) {
             onSelectLocation(selectedUser.location);
+        }
+    }, [isPayed]);
+
+    useEffect(() => {
+        if (isPayed === false && targetRef.current) {
+            targetRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
         }
     }, [isPayed]);
 
@@ -28,11 +36,11 @@ export const LocationPaywall = ({ users, onSelectLocation }: LocationPaywallProp
     <div className="py-6 mt-16 mb-auto">
     <div className="mx-auto max-w-screen-2xl px-4 md:px-8 ">
     <div className="mb-10 md:mb-16">
-        <h2 className="mb-4 text-center text-2xl font-bold text-gray-800 md:mb-6 lg:text-3xl">
+        <h2 className="mb-4 text-center text-2xl font-bold md:mb-6 lg:text-3xl">
             Ubicar Asesinos
         </h2>
 
-        <p className="mx-auto max-w-screen-md text-center text-gray-500 md:text-lg">
+        <p className="mx-auto max-w-screen-md text-center text-gray-300 md:text-lg">
             Elige al asesino que quieras ubicar
         </p>
     </div>
@@ -76,25 +84,13 @@ export const LocationPaywall = ({ users, onSelectLocation }: LocationPaywallProp
     
 
     </div>
-    <div id="infoPagoMapa">
+    <div ref={targetRef}>
         {isPayed === false &&
-        <Pay message={'Hola'} payValue={payValue} onSuccess={setisPayed}/>
+        <Pay message={`¿Seguro que quieres ver la ubicación de ${selectedUser?.name}?`} payValue={payValue} onSuccess={setisPayed}/>
         }
     </div>
     
     </div>
     </div>
   )
-  {/* isPayed !== null && !isPayed &&
-            <div className="py-6 sm:py-8 lg:py-12">
-            <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
-            <div className="flex flex-col items-center justify-between gap-4 rounded-lg bg-gray-800 p-4 sm:flex-row md:p-8">
-                <div>
-                    <h2 className="text-xl font-bold text-indigo-500 md:text-2xl">Debes pagar para poder conocer la ultima ubicacion de {selectedUser?.name}</h2>
-                </div>
-
-            <a onClick={handleClick2} href="javascript:void(0);" className="inline-block rounded-lg bg-indigo-500 px-8 py-3 text-center text-sm font-semibold !text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 md:text-base">Pagar $50 ahora</a>
-            </div>
-            </div>
-            </div>*/}
 }

@@ -2,7 +2,7 @@ import { MapComponent } from "../../elements/Map";
 import { NavBar } from "../../elements/NavBar";
 import { User } from "../../types";
 import { Location} from "../../types";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { LocationPaywall } from "./LocationPaywall";
 
 // Crear la lista de usuarios
@@ -17,17 +17,26 @@ const users: User[] = [
 
 export const LocateAssassins = () => {
     const [selectedLoc, setSelectedLoc] = useState<Location|null>(null);
+    const targetRef = useRef<HTMLDivElement>(null);
 
 const pickUser = (location: Location) => {
     setSelectedLoc(location);
 }
 
+useEffect(() => {
+        if (selectedLoc !== null && targetRef.current) {
+            targetRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+    }, [selectedLoc]);
+
     return (
         <div className="w-screen bg-transparent">
-            <NavBar/>
+            <NavBar user={"yo"}/>
 
             <LocationPaywall users={users} onSelectLocation={pickUser}/>
+            <div ref={targetRef}>
             {selectedLoc !== null && <MapComponent location={selectedLoc} />}
+            </div>
         </div>
     )
 }

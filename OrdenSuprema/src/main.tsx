@@ -8,14 +8,17 @@ import { Login } from './components/LoginForm.tsx'
 import { FormAssassin } from './components/HighTable/FormAssassin.tsx'
 import { HighProfile } from './components/HighTable/HighProfile.tsx'
 import { History } from './components/HighTable/History.tsx'
-import { MissionPostPage } from './components/GlobalComponents/PostMissionPage.tsx';
+import { MissionPostPage } from './components/Global/PostMissionPage.tsx';
 import { ChangeCoinsPage } from './components/Assassin/ChangeCoinsPage.tsx';
-import { CancelMissionPage } from './components/GlobalComponents/CancelMissionPage.tsx';
+import { CancelMissionPage } from './components/Global/CancelMissionPage.tsx';
 import { DebtsAssassin } from './components/HighTable/DebtsAssassin.tsx'
+import { LocateAssassins } from './components/Global/LocateAssassins.tsx';
+import { MissionsConfirm } from './components/HighTable/MissionsConfirm.tsx';
+import { missions } from './db.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-
+    <MissionsConfirm/>
     <BrowserRouter> 
     
       <Routes>
