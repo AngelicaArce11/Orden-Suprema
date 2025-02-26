@@ -30,7 +30,7 @@ export const Debt = sequelize.define(
 );
 
 //Associations
-Debt.belongsTo(User, { foreignKey: {name: 'creditorId', allowNull: false}});
-Debt.belongsTo(User, { foreignKey: {name: 'debtorId', allowNull: false}});
+Debt.belongsTo(User.scope('assassin'), { foreignKey: {name: 'creditorId', allowNull: false}});
+Debt.belongsTo(User.scope('assassin'), { foreignKey: {name: 'debtorId', allowNull: false}});
 User.hasMany(Debt, { foreignKey: 'creditorId' });
 User.hasMany(Debt, { foreignKey: 'debtorId' });

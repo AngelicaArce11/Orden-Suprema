@@ -39,7 +39,7 @@ export const Mission = sequelize.define(
 );
 
 //Associations
-Mission.belongsTo(User, { foreignKey: {name: 'assignedById', allowNull: false}});
+Mission.belongsTo(User.scope('assassin'), { foreignKey: {name: 'assignedToId', allowNull: false}});
 Mission.belongsTo(User, { foreignKey: {name: 'publishedById', allowNull: false}});
 User.hasMany(Mission, { foreignKey: 'assignedById' });
 User.hasMany(Mission, { foreignKey: 'publishedById' });

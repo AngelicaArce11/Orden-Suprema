@@ -15,14 +15,19 @@ export const User = sequelize.define(
             allowNull: false,
             unique: true
         },
-        mail: {
+        email: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            unique: true,
         },
         password: {
             type: DataTypes.STRING,
             allowNull: false
         },
+        type: {
+            type: DataTypes.ENUM('assassin', 'order'),
+            allowNull: false,
+          },
         // Assassin attributes
         latitude: {
           type: DataTypes.FLOAT,
@@ -49,6 +54,6 @@ export const User = sequelize.define(
 );
 
 // Scopes for filtering users
-User.addScope('assassins', { where: { type: 'assassin' } });
-User.addScope('orders', { where: { type: 'order' } });
+User.addScope('assassin', { where: { type: 'assassin' } });
+User.addScope('order', { where: { type: 'order' } });
 

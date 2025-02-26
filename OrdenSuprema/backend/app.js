@@ -1,6 +1,10 @@
 import express from 'express';
 import {corsMiddleware} from './middlewares/cors.js'
 import { sequelize } from './database/sequelize.js';
+import { User } from './database/models/User.js';
+import { Debt } from './database/models/Debt.js';
+import { Mission } from './database/models/Mission.js';
+import { Transaction } from './database/models/Transaction.js';
 
 
 const app = express();
