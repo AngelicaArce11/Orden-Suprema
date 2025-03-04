@@ -1,6 +1,6 @@
 import { User } from "../database/models/User.js";
 
-export const getAllUsers = async (req, res) => {
+export const getAllUsers = async (req, res) => { //Lista de todos los usuarios registrados
     try {
         const users = await User.findAll();
         res.json(users);
@@ -9,7 +9,7 @@ export const getAllUsers = async (req, res) => {
     }
 };
 
-export const getAllAssassins = async (req, res) => {
+export const getAllAssassins = async (req, res) => { //Lista de todos los Asesinos registrados
     try {
         const assassins = await User.scope('assassin').findAll();
         res.json(assassins);
@@ -18,7 +18,7 @@ export const getAllAssassins = async (req, res) => {
     }
 };
 
-export const getAllOrder = async (req, res) => {
+export const getAllOrder = async (req, res) => { //Lista de todos los Miembros de la Orden (Admins) registrados
     try {
         const orderMembers = await User.scope('order').findAll();
         res.json(orderMembers);

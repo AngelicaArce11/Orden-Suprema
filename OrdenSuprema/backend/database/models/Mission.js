@@ -20,7 +20,7 @@ export const Mission = sequelize.define(
             allowNull: true,
         },
         status: {
-            type: DataTypes.ENUM('completed', 'in_progress', 'under_review', 'unassigned', 'failed'),
+            type: DataTypes.ENUM('unassigned', 'in_progress', 'under_review', 'completed', 'failed'),
             allowNull: false,
             defaultValue: 'unassigned'
         },
@@ -39,7 +39,7 @@ export const Mission = sequelize.define(
 );
 
 //Associations
-Mission.belongsTo(User.scope('assassin'), { foreignKey: {name: 'assignedToId', allowNull: false}});
+Mission.belongsTo(User.scope('assassin'), { foreignKey: {name: 'assignedToId', allowNull: true}});
 Mission.belongsTo(User, { foreignKey: {name: 'publishedById', allowNull: false}});
-User.hasMany(Mission, { foreignKey: 'assignedById' });
+User.hasMany(Mission, { foreignKey: 'assignedToId' });
 User.hasMany(Mission, { foreignKey: 'publishedById' });
