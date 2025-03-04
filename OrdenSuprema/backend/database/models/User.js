@@ -22,7 +22,7 @@ export const User = sequelize.define(
         },
         password: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: true
         },
         type: {
             type: DataTypes.ENUM('assassin', 'order'),

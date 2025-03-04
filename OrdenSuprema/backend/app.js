@@ -1,10 +1,7 @@
 import express from 'express';
-import {corsMiddleware} from './middlewares/cors.js'
+import {corsMiddleware} from './middlewares/cors.js';
 import { sequelize } from './database/sequelize.js';
-import { User } from './database/models/User.js';
-import { Debt } from './database/models/Debt.js';
-import { Mission } from './database/models/Mission.js';
-import { Transaction } from './database/models/Transaction.js';
+import dbRoutes from './routes/db_routes.js' ;
 
 
 const app = express();
@@ -15,6 +12,8 @@ app.get('/', (req, res) =>{
 
 
 app.use(corsMiddleware());
+app.use(express.json())
+app.use(dbRoutes);
 
 // Puertos definidos para correr el servidor de express
 const port = process.env.PORT || 3000
@@ -22,7 +21,7 @@ const port = process.env.PORT || 3000
 // Declaramos en que puerto estara escuchando nuestra app
 async function main() {
     try{
-        await sequelize.sync({force: true, alter:true});
+        await sequelize.sync({force: false, alter:true});
         app.listen(port, () => {
         console.log(`Servidor corriendo en el puerto ${port}`);
         })  

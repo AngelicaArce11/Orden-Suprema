@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "back": "node backend/app.js",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"

@@ -27,11 +27,11 @@ export const Mission = sequelize.define(
         paymentValue: {
             type: DataTypes.FLOAT,
             allowNull: false,
-          },
-          proofImage: {
-            type: DataTypes.STRING, // URL or file path
-            allowNull: true, // Might not be available until completion
-          },
+        },
+        proofImage: {
+        type: DataTypes.STRING, // URL or file path
+        allowNull: true, // Might not be available until completion
+        },
     },
     {
         timestamps: false
