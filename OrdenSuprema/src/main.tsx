@@ -11,12 +11,14 @@ import { History } from './components/HighTable/History.tsx'
 import { MissionPostPage } from './components/Global/PostMissionPage.tsx';
 import { ChangeCoinsPage } from './components/Assassin/ChangeCoinsPage.tsx';
 import { CancelMissionPage } from './components/Global/CancelMissionPage.tsx';
-import { DebtsAssassin } from './components/HighTable/DebtsAssassin.tsx'
+import { DebtsHighTable } from './components/HighTable/DebtsHighTable.tsx';
+import { DebtsAssassin } from './components/Assassin/DebtsAssassin.tsx';
 import { LocateAssassins } from './components/Global/LocateAssassins.tsx';
 import { MissionsConfirm } from './components/HighTable/MissionsConfirm.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
+    {/* <MissionsConfirm/> */}
     <BrowserRouter> 
     
       <Routes>
@@ -32,6 +34,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/cancelMission" element={<CancelMissionPage />} />
         <Route path="/debtsAssassin" element={<DebtsAssassin/>} />
         <Route path="/locateAssassin" element={<LocateAssassins/>} />
+        <Route path="/debtsHighTable" element={<DebtsHighTable/>} />
       </Routes>
 
     </BrowserRouter>

@@ -9,7 +9,7 @@ const assassinDebts = [
     { deudor: "John Smith", acreedor:"Marco", descripcion: "dhbjhejhefb", estado: "incompleta" },
   ];
 
-export const DebtsAssassin = () => {
+export const DebtsHighTable = () => {
 
     const [filterCompleted, setFilterCompleted] = useState(false);
     const [filterNCompleted, setFilterNCompleted] = useState(false);
