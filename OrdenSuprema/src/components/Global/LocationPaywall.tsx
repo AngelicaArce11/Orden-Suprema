@@ -1,33 +1,34 @@
 import { useEffect, useRef, useState } from "react";
-import { User, Location } from "../../types";
 import { Pay } from "../Assassin/Pay";
 
 interface LocationPaywallProps {
-    users: User[];
-    onSelectLocation: (location: Location) => void;
+    users: Assassin[];
+    onSelectLocation: (location: UserLocation) => void;
 }
 
 
 
 export const LocationPaywall = ({ users, onSelectLocation }: LocationPaywallProps) => {
     const [isPayed, setisPayed] = useState<boolean|null>(null);
-    const [selectedUser, setSelectedUser] = useState<User|null>(null);
+    const [selectedUser, setSelectedUser] = useState<Assassin|null>(null);
     const payValue = 49;
     const targetRef = useRef<HTMLDivElement>(null);
 
-    const handleClick1 = (user:User) => {
-        setisPayed(false);
-        setSelectedUser(user);
+    const handleClick1 = (user:Assassin) => {
+        setisPayed(false); //Valor por defecto
+        setSelectedUser(user); //Selecciona el asesino clickeado por el cliente
     };
 
     useEffect(() => {
-        if (isPayed && selectedUser) {
-            onSelectLocation(selectedUser.location);
+        if (isPayed && selectedUser) { 
+            //Se selecciona la ubicación del asesino seleccionado para guardarla en archivo padre
+            onSelectLocation({lat: selectedUser.latitude, lng: selectedUser.longitude}); 
         }
     }, [isPayed]);
 
     useEffect(() => {
         if (isPayed === false && targetRef.current) {
+            //Se selecciona la ubicación del asesino seleccionado para guardarla en archivo padre
             targetRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
         }
     }, [isPayed]);
@@ -49,8 +50,8 @@ export const LocationPaywall = ({ users, onSelectLocation }: LocationPaywallProp
     //End of text
     //Start of assassins
     }
+<div className="grid gap-6 grid-cols-[repeat(auto-fit,minmax(250px,1fr))] place-items-center">
 
-    <div className="grid gap-x-4 gap-y-8 sm:grid-cols-2 md:gap-x-6 lg:grid-cols-3 xl:grid-cols-4">
         {
         users.map((user) => (
         <div >
@@ -58,7 +59,7 @@ export const LocationPaywall = ({ users, onSelectLocation }: LocationPaywallProp
                key={`map_btn${user.name}`}
                onClick={() => handleClick1(user)} 
                className="group relative mb-2 block h-96 overflow-hidden rounded-lg bg-gray-800 shadow-lg lg:mb-3">
-                <img src="https://lh3.googleusercontent.com/a-/ALV-UjWcy1cKKEpIwGka2J098OpWZ6j-WkYlXfeGpehBpV995cIc6vSXaA=s240-p-k-rw-no"
+                <img src={user.avatar + `?size=${Math.floor(innerWidth/3)}x${Math.floor(innerWidth/3)}`}
                      loading="lazy"
                      className="h-full w-full object-cover object-center transition duration-200 group-hover:scale-110" />
             </a>

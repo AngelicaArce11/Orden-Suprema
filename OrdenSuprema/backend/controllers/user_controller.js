@@ -34,6 +34,7 @@ export const createAssassin = async (req, res) => {
             name: name,
             email: email,
             password: password,
+            avatar: `https://robohash.org/set_set5/bgset_bg1/${email}`,
             type: 'assassin',
             latitude: latitude,
             longitude: longitude,
@@ -52,6 +53,7 @@ export const createOrder = async (req, res) => {
             name: name,
             email: email,
             password: password,
+            avatar: `https://robohash.org/set_set4/bgset_bg1/${email}`,
             type: 'order',
             position: position
         });
@@ -62,10 +64,15 @@ export const createOrder = async (req, res) => {
 };
 
 export const updateUser = async (req, res) => {
-    try {
-    const { id } = req.params
-    //Pendiente por implementar
-    res.sendStatus(501);
+    try { //Pendiente por implementar
+    const { id } = req.params;
+    const {set} = req.body
+
+    const user = await User.findByPk(id);
+    user.avatar = `https://robohash.org/set_set${set}/bgset_bg1/${user.email}`;
+    await user.save();
+
+    res.json(user); 
     } catch (error) {
         return res.status(500).json({message: error.message});
 }};
