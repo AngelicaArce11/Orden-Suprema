@@ -1,11 +1,11 @@
 import { Router } from "express";
-const router = Router();
+
 import {
   getAllDebts,
   createDebt,
   updateDebt,
   deleteDebt,
-} from "../controllers/debt_controller.js";
+} from "../controllers/debtController.js";
 
 import {
   getAllMissions,
@@ -17,7 +17,7 @@ import {
   confirmMission,
   updateMission,
   deleteMission,
-} from "../controllers/mission_controller.js";
+} from "../controllers/missionController.js";
 
 import {
   getAllUsers,
@@ -27,7 +27,15 @@ import {
   createAssassin,
   createOrder,
   updateUser,
-} from "../controllers/user_controller.js";
+} from "../controllers/userController.js";
+
+import { loginUser } from "../controllers/authController.js";  
+import { verifyToken, verifyRole } from "../middlewares/auth.js";
+
+const router = Router();
+
+//Login
+router.post("/login", loginUser);
 
  //Debts
 router.get('/debt', getAllDebts);
@@ -64,7 +72,7 @@ router.get('/User/:id', getUser);
 router.get('/User/Assassin', getAllAssassins);
 router.get('/User/Order', getAllOrder);
 
-router.post('/User/Assassin', createAssassin);
+router.post('/User/Assassin', verifyToken, verifyRole(["order"]), createAssassin);
 router.post('/User/Order', createOrder);
 
 router.put('/User/:id', updateUser);

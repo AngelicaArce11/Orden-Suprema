@@ -1,4 +1,5 @@
 import { User } from "../database/models/User.js";
+import { Op } from "sequelize";
 
 export const getAllUsers = async (req, res) => { //Lista de todos los usuarios registrados
     try {
@@ -39,8 +40,23 @@ export const getAllOrder = async (req, res) => { //Lista de todos los Miembros d
 
 export const createAssassin = async (req, res) => {
     try {
-        const { name, email, password, latitude, longitude, totalCoins } = req.body
+        const { id, name, email, password, latitude, longitude, totalCoins } = req.body
+
+        // Verifica si el ID ya existe
+        const existingUser = await User.findOne({ where: { id } });
+        if (existingUser) {
+            return res.status(400).json({ message: "El ID ya está en uso" });
+        }
+
+        // Verifica si el email ya existe
+        const existingEmail = await User.findOne({ where: { email } });
+        if (existingEmail) {
+            return res.status(400).json({ message: "El email ya está en uso" });
+        }
+
+
         const newUser = await User.create({
+            id: id,
             name: name,
             email: email,
             password: password,
@@ -52,14 +68,28 @@ export const createAssassin = async (req, res) => {
         });
         res.json(newUser);
     } catch (error) {
-        return res.status(500).json({message: error.message});
+        return res.status(500).json({ message: error.message, errors: error.errors || [] });
     }
 };
 
 export const createOrder = async (req, res) => {
     try {
-        const { name, email, password, position } = req.body
+        const { id, name, email, password, position } = req.body
+
+        // Verifica si el ID ya existe
+        const existingUser = await User.findOne({ where: { id } });
+        if (existingUser) {
+            return res.status(400).json({ message: "El ID ya está en uso" });
+        }
+
+        // Verifica si el email ya existe
+        const existingEmail = await User.findOne({ where: { email } });
+        if (existingEmail) {
+            return res.status(400).json({ message: "El email ya está en uso" });
+        }
+
         const newUser = await User.create({
+            id: id,
             name: name,
             email: email,
             password: password,
