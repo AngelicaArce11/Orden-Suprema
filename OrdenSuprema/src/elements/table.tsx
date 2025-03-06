@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Table, Button, Pagination } from "flowbite-react";
 
 
@@ -8,7 +8,7 @@ interface TableElementProps {
     data: object[];
     nameButton?: string
     colorButton?: string
-    onClick? : () => void;
+    onClick? : (parameter: any) => void;
 }
 
 export const TableElement = ({header, data, nameButton, colorButton, onClick} : TableElementProps) => {
@@ -24,6 +24,13 @@ export const TableElement = ({header, data, nameButton, colorButton, onClick} : 
 
     // Funcion para actualizar la pagina de la tabla
     const onPageChange = (page: number) => setCurrentPage(page);
+
+    // Para cuando por ejemplo se acepta la unica mision que queda en una pagina, entonces para que vuelva a la anterior
+    useEffect(() => {
+        if (dataPaginated.length === 0 && currentPage > 1) {
+            setCurrentPage((prevPage) => prevPage - 1); // Retrocede una página si la actual está vacía
+        }
+    }, [dataPaginated, currentPage]); 
 
     return (
         <> 
@@ -49,11 +56,15 @@ export const TableElement = ({header, data, nameButton, colorButton, onClick} : 
                                         <Table.Cell className='font-medium text-white break-words text-wrap p-2'>{value}</Table.Cell>
                                     ) : (
                                         // Si la tabla tiene botón
-                                        cellIndex === entries.length - 1 && nameButton !== undefined ? (
+                                        cellIndex === entries.length - 1 && nameButton !== undefined  ? (
                                             <>
                                                 <Table.Cell className='text-gray break-words text-wrap p-2'>{value}</Table.Cell>
                                                 <Table.Cell className='text-center flex justify-center items-center '>
-                                                    <Button outline size='md' gradientDuoTone={colorButton} onClick={onClick}>  {nameButton} </Button>
+                                                    {onClick !== undefined ? (
+                                                        <Button outline size='md' gradientDuoTone={colorButton} onClick={() => onClick(rowIndex)}>  {nameButton} </Button>
+                                                    ): (
+                                                        <Button outline size='md' gradientDuoTone={colorButton} onClick={onClick}>  {nameButton} </Button>
+                                                    )} 
                                                 </Table.Cell>
                                             </>
                                         ) : (
@@ -70,7 +81,10 @@ export const TableElement = ({header, data, nameButton, colorButton, onClick} : 
             
             {/* Botones de paginacion */}
             <div className="flex pt-5 mb-5 justify-center">
-                <Pagination layout="navigation" previousLabel='Anterior' nextLabel='Siguiente' currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} showIcons />
+                {totalPages !== 1 ? (
+                    <Pagination layout="navigation" previousLabel='Anterior' nextLabel='Siguiente' currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} showIcons />
+                    ) : null
+                }
             </div>
         </>
     );

@@ -1,5 +1,6 @@
 import { Mission } from "../database/models/Mission.js";
 
+// Para obtener todas las misiones
 export const getAllMissions = async (req, res) => {
     try {
         const missions = await Mission.findAll();
@@ -9,6 +10,21 @@ export const getAllMissions = async (req, res) => {
     }
 };
 
+// Para obtener solo las misiones que no han sido asignadas
+export const getFilteredMissions = async (req, res) => {
+    try {
+        const missions = await Mission.findAll({
+            where: {
+                status: 'unassigned'
+            }
+        });
+        res.json(missions);
+    } catch (error) {
+        return res.status(500).json({message: error.message});
+    }
+};
+
+// Para crear una mision
 export const createMission = async (req, res) => {
     try {
         const {targetName, description, paymentValue, publishedById} = req.body
@@ -24,6 +40,7 @@ export const createMission = async (req, res) => {
     }
 };
 
+// Para actualizar una mision
 export const updateMission = async (req, res) => {
     try {
     const { id } = req.params
@@ -64,31 +81,36 @@ export const completeMission = async (req, res) => {
 }};
 
 export const confirmMission = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { isConfirmed } = req.body;
+    try {
+        const { id } = req.params;
+        const { isConfirmed } = req.body;
 
-    const mission = await Mission.findByPk(id);
-    if (isConfirmed) {
-      mission.status = "completed";
-    } else {
-      mission.status = "failed";
+        const mission = await Mission.findByPk(id);
+        if (isConfirmed) {
+            mission.status = "completed";
+        } else {
+            mission.status = "failed";
+        }
+        await mission.save();
+        res.json(mission);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
     }
-    await mission.save();
-    res.json(mission);
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
 };
 
 export const deleteMission = async (req, res) => {
     try {
         const { id } = req.params
-        await Mission.destroy({
+        const deletedRows = await Mission.destroy({
             where: {
                 id
             }
         });
+
+        if (deletedRows === 0) {
+            return res.status(404).json({ message: "Misión no encontrada" });
+        }
+
         res.sendStatus(204);
     } catch (error) {
         return res.status(500).json({message: error.message});

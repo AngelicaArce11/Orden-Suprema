@@ -1,99 +1,70 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { NavBar } from "../../elements/NavBar";
 import { TableElement } from "../../elements/Table";
-import { Button, Modal } from "flowbite-react";
-import {HiOutlineExclamationCircle, HiCurrencyDollar} from "react-icons/hi2";
-
-const missions = [
-    {
-        nombre: 'Marco Botton', 
-        descripcion: 'Eliminar al objetivo sin ser detectado y recuperardocumentos clasifcados.',
-        estado: 'En progreso',
-        pago: 20,
-    },
-    {
-        nombre: 'Marco Botton', 
-        descripcion: 'Eliminar al objetivo sin ser detectado y recuperardocumentos clasifcados.',
-        estado: 'En progreso',
-        pago: 20,
-    },
-    {
-        nombre: 'Marco Botton', 
-        descripcion: 'Eliminar al objetivo sin ser detectado y recuperardocumentos clasifcados.',
-        estado: 'En progreso',
-        pago: 20,
-    },
-    {
-        nombre: 'Marco Botton', 
-        descripcion: 'Eliminar al objetivo sin ser detectado y recuperardocumentos clasifcados.',
-        estado: 'En progreso',
-        pago: 20,
-    },
-    {
-        nombre: 'Marco Botton', 
-        descripcion: 'Eliminar al objetivo sin ser detectado y recuperardocumentos clasifcados.',
-        estado: 'En progreso',
-        pago: 20,
-    },
-    {
-        nombre: 'Marco Botton', 
-        descripcion: 'Eliminar al objetivo sin ser detectado y recuperardocumentos clasifcados.',
-        estado: 'En progreso',
-        pago: 20,
-    },
-    {
-        nombre: 'Marco Botton', 
-        descripcion: 'Eliminar al objetivo sin ser detectado y recuperardocumentos clasifcadosssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss.',
-        estado: 'En progreso',
-        pago: 20,
-    },
-    {
-        nombre: 'Marco Botton', 
-        descripcion: 'Eliminar al objetivo sin ser detectado y recuperardocumentos clasifcadosssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss.',
-        estado: 'En progreso',
-        pago: 20,
-    },
-    {
-        nombre: 'Marco Botton', 
-        descripcion: 'Eliminar al objetivo sin ser detectado y recuperardocumentos clasifcadosssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss.',
-        estado: 'En progreso',
-        pago: 20,
-    },
-    {
-        nombre: 'Marco Botton', 
-        descripcion: 'Eliminar al objetivo sin ser detectado y recuperardocumentos clasifcadosssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss.',
-        estado: 'En progreso',
-        pago: 20,
-    },
-    {
-        nombre: 'Marco Botton', 
-        descripcion: 'Eliminar al objetivo sin ser detectado y recuperardocumentos clasifcadosssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss.',
-        estado: 'En progreso',
-        pago: 20,
-    },
-    {
-        nombre: 'Marco Botton', 
-        descripcion: 'Eliminar al objetivo sin ser detectado y recuperardocumentos clasifcadosssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss.',
-        estado: 'En progreso',
-        pago: 20,
-    },
-    {
-        nombre: 'Marco Botton', 
-        descripcion: 'Eliminar al objetivo sin ser detectado y recuperardocumentos clasifcadosssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss.',
-        estado: 'En progreso',
-        pago: 20,
-    },
-]
+import { Button, Modal, Toast, Alert } from "flowbite-react";
+import {HiOutlineExclamationCircle, HiCurrencyDollar, HiCheckCircle, HiXCircle, HiInformationCircle} from "react-icons/hi2";
+import axios from "axios";
 
 export const CancelMissionPage = () => {
 
+    // Estado que contiene las misiones que se pueden cancelar
+    const [missions, setMissions] = useState<Mission[]>([]);
+    // Estado para actualizar la pantalla
+    const [refresh, setRefresh] = useState(false);
+    // Estado para manejar el modal para confirmar la cancelacion de una mision
+    const [openModal, setOpenModal] = useState(false);
+    // Estado para manejar la cancelacion de una mision, tiene el indice de la fila de mision a cancelar
+    const [cancel, setCancel] = useState<number>();
+    // Estado para notificaciones
+    const [notifications, setNotifications] = useState('');
+
     // Obtenemos el tipo de usuario
-    const user = 'assassin';
+    const user = 'highTable';
     // Monedas del usuario
     const coins = 40;
 
-    // Estado para manejar el modal para confirmar la cancelacion de una mision
-    const [openModal, setOpenModal] = useState(false);
+    // Obtenemos los datos de la BD 
+    useEffect(() => {
+        axios
+            .get("http://localhost:3000/FilteredMission")
+            .then((response) => setMissions(
+                // Mapeamos para obtener los atributos que queremos presentar en la pagina
+                response.data.map((mission: any) => ({
+                    id: mission.id,
+                    targetName: mission.targetName,
+                    description: mission.description,
+                    status: 'Sin asignar',
+                    paymentValue: mission.paymentValue
+                })
+                )
+            ))
+            .catch((error) => console.error("Error fetching missions:", error));
+    }, [refresh]);
+
+    // Este metodo sirve para obtener la fila de la mision que se esta cancelando
+    const clickCancel = (row: number) => {
+        setCancel(row);
+        setOpenModal(true);
+    };
+
+    // Este metodo se encarga de realizar la actualizacion en la BD de la mision que ha sido aceptada
+    const cancelMission = async (indexMission: number) => {
+        // Asignamos la mision al asesino 
+        axios
+            .delete(`http://localhost:3000/Mission/delete/${indexMission}`)
+            .then(() => {
+                setOpenModal(false);
+                setNotifications('Success');
+                setRefresh(!refresh);
+            })
+            .catch((error) => {
+                console.error("Error cancel mission:", error); 
+                setOpenModal(false);
+                setNotifications('Failed');
+            }
+            );
+    }
+
 
     return (
         <>
@@ -102,13 +73,42 @@ export const CancelMissionPage = () => {
             <div className='flex justify-center items-center mt-30'>
                 <h5 className='text-white font-bold text-2xl lg:text-5xl'> Cancelar Misión </h5>
             </div>
-            {/* Tabla con las misiones */}
-            <div className='w-full pt-15 px-2 sm:px-15'>
-                <TableElement header={['Nombre del objetivo', 'Descripción', 'Estado', 'Pago', '']} data={missions} nameButton='Cancelar' colorButton='pinkToOrange'onClick={() => setOpenModal(true)} ></TableElement>
-            </div>
+
+            {/* Logica que verifica si hay misiones disponibles para asignar */}
+            {missions.length === 0 ? (
+                <div className='flex justify-center items-center mt-30'>
+                    <Alert color="failure" icon={() => <HiInformationCircle size={30} className='m-2'></HiInformationCircle>}>
+                        <span className="font-semibold text-sm lg:text-xl "> No hay misiones disponibles para cancelar. </span>
+                    </Alert>
+                </div>
+            ): (
+                <>  
+                    {/* Tabla con las misiones */}
+                    <div className='w-full pt-15 px-2 sm:px-15'>
+                        <TableElement header={['Nombre del objetivo', 'Descripción', 'Estado', 'Pago', '']} data={missions.map(({ id, ...rest }) => rest)} nameButton='Cancelar' colorButton='pinkToOrange' onClick={clickCancel} ></TableElement>
+                    </div>
+                </>
+            )}
+
+            {/* Notificaciones de lo que ocurre con la asignacion de la mision */}
+            {notifications && notifications !== '' ? (
+                <Toast className='absolute right-4 bottom-4'>
+                    {notifications === 'Success' ? (
+                        <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-800 text-green-200">
+                            <HiCheckCircle className="h-5 w-5" />
+                        </div>
+                    ) : (
+                        <div className='inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-800 text-red-200'> 
+                            <HiXCircle className="h-5 w-5" />
+                        </div>
+                    )}
+                    <div className="ml-3 text-sm font-normal">{notifications === 'Success' ? 'Misión cancelada exitosamente.' : 'No se ha podido cancelar la misión.'}</div>
+                    <Toast.Toggle onClick={() => setNotifications('')} />
+                </Toast> 
+            ) : null } 
+
             {/* Modal de confirmacion o cancelacion */}
             <Modal size="md" show={openModal} onClose={() => setOpenModal(false)}>
-                <Modal.Header></Modal.Header>
                 <Modal.Body>
                     <div className='text-center'>
                         <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
@@ -133,12 +133,8 @@ export const CancelMissionPage = () => {
                     ): null}
                     
                     <div className="flex justify-center gap-4">
-                        <Button color="success" onClick={() => setOpenModal(false)}>
-                            Sí, estoy seguro
-                        </Button>
-                        <Button color="failure" onClick={() => setOpenModal(false)}>
-                            Cancelar
-                        </Button>
+                        <Button outline size='md' gradientDuoTone="greenToBlue" onClick={() => cancel !== undefined ? cancelMission(missions[cancel].id) : setOpenModal(false)}>  Sí, estoy seguro </Button>
+                        <Button outline size='md' gradientDuoTone="pinkToOrange" onClick={() => setOpenModal(false)}>  Cancelar </Button>
                     </div>
                 </Modal.Body>
             </Modal>

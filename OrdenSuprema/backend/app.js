@@ -6,11 +6,6 @@ import dbRoutes from './routes/db_routes.js' ;
 
 const app = express();
 
-app.get('/', (req, res) =>{
-    res.send('holi')
-})
-
-
 app.use(corsMiddleware());
 app.use(express.json())
 app.use(dbRoutes);

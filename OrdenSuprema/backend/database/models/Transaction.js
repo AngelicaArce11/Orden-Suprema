@@ -14,11 +14,11 @@ export const Transaction = sequelize.define(
         type: {
             type: DataTypes.ENUM('deposit', 'withdrawal', 'payment', 'reward'),
             allowNull: false,
-          },
-          amount: {
+        },
+            amount: {
             type: DataTypes.FLOAT,
             allowNull: false,
-          },
+        },
     },
     {
         timestamps: false

@@ -9,6 +9,7 @@ import {
 
 import {
   getAllMissions,
+  getFilteredMissions,
   createMission,
   acceptMission,
   completeMission,
@@ -35,12 +36,13 @@ router.get('/debt/:id');
 
  //Missions
 router.get('/Mission', getAllMissions);
+router.get('/FilteredMission', getFilteredMissions);
 router.post('/Mission', createMission);
 router.put('/Mission:id');
 router.put('/Mission/accept/:id', acceptMission);
 router.put('/Mission/complete/:id', completeMission);
 router.put('/Mission/confirm/:id', confirmMission);
-router.delete('/Mission/:id');
+router.delete('/Mission/delete/:id', deleteMission);
 router.get('/Mission/:id');
 
  //Transactions
