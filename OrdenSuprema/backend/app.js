@@ -1,7 +1,7 @@
 import express from 'express';
 import {corsMiddleware} from './middlewares/cors.js';
 import { sequelize } from './database/sequelize.js';
-import dbRoutes from './routes/db_routes.js' ;
+import dbRoutes from './routes/dbRoutes.js' ;
 
 
 
