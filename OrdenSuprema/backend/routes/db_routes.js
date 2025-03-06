@@ -1,10 +1,12 @@
 import { Router } from "express";
+import { loginUser } from "../controllers/authController.js";  
+import { verifyToken, verifyRole } from "../middlewares/auth.js";
 
 import {
   getAllDebts,
   createDebt,
   updateDebt,
-  deleteDebt,
+  deleteDebt
 } from "../controllers/debtController.js";
 
 import {
@@ -28,9 +30,6 @@ import {
   createOrder,
   updateUser,
 } from "../controllers/userController.js";
-
-import { loginUser } from "../controllers/authController.js";  
-import { verifyToken, verifyRole } from "../middlewares/auth.js";
 
 const router = Router();
 

@@ -3,9 +3,10 @@ import { useEffect, useState } from "react";
 
 interface MissionProps {
   mission: Mission;
+  onMissionUpdated: () => void;
 }
 
-export const MissionToConfirm = ({ mission }: MissionProps) => {
+export const MissionToConfirm = ({ mission, onMissionUpdated }: MissionProps) => {
   const [executioner, setExecutioner] = useState<User>();
 
   useEffect(() => {
@@ -14,6 +15,16 @@ export const MissionToConfirm = ({ mission }: MissionProps) => {
       .then((response) => setExecutioner(response.data))
       .catch((error) => console.error("Error fetching executioner:", error));
   }, []);
+
+  const handleUpdate = async (isConfirmed: boolean) => {
+    try {
+      await axios.put(`http://localhost:3000/Mission/confirm/${mission.id}`, { isConfirmed });
+      // Llama a al función recibida por props para actualizar las misiones por pantalla
+      onMissionUpdated();
+    } catch (error) {
+      console.error("Error updating mission:", error);
+    }
+  };
 
   return (
     <div className="py-6 sm:py-8 lg:py-12">
@@ -62,10 +73,14 @@ export const MissionToConfirm = ({ mission }: MissionProps) => {
               <h2 className="w-full mb-2 text-center text-xl font-semibold sm:text-2xl md:mb-4 ">
                 ¿Confirmar misión?
               </h2>
-              <button className="inline-block rounded-lg bg-green-500 px-8 py-3 text-center text-sm font-semibold !text-white outline-none ring-green-300 transition duration-100 hover:bg-green-600 focus-visible:ring active:bg-green-700 md:text-base">
+              <button
+                className="inline-block rounded-lg bg-green-500 px-8 py-3 text-center text-sm font-semibold !text-white outline-none ring-green-300 transition duration-100 hover:bg-green-600 focus-visible:ring active:bg-green-700 md:text-base"
+                onClick={() => { handleUpdate(true); }}>
                 Completa
               </button>
-              <button className="inline-block rounded-lg bg-red-500 px-8 py-3 text-center text-sm font-semibold !text-white outline-none ring-red-300 transition duration-100 hover:bg-red-600 focus-visible:ring active:bg-red-700 md:text-base">
+              <button
+                className="inline-block rounded-lg bg-red-500 px-8 py-3 text-center text-sm font-semibold !text-white outline-none ring-red-300 transition duration-100 hover:bg-red-600 focus-visible:ring active:bg-red-700 md:text-base"
+                onClick={() => { handleUpdate(false); }}>
                 Fracaso
               </button>
             </div>
