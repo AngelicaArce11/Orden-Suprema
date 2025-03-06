@@ -24,6 +24,20 @@ export const getFilteredMissions = async (req, res) => {
     }
 };
 
+// Para obtener solo las misiones que no han sido revisadas por la orden
+export const getUnreviewedMissions = async (req, res) => {
+    try {
+        const missions = await Mission.findAll({
+            where: {
+                status: 'under_review'
+            }
+        });
+        res.json(missions);
+    } catch (error) {
+        return res.status(500).json({message: error.message});
+    }
+};
+
 // Para crear una mision
 export const createMission = async (req, res) => {
     try {

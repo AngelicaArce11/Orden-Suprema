@@ -10,6 +10,7 @@ import {
 import {
   getAllMissions,
   getFilteredMissions,
+  getUnreviewedMissions,
   createMission,
   acceptMission,
   completeMission,
@@ -21,6 +22,7 @@ import {
 import {
   getAllUsers,
   getAllAssassins,
+  getUser,
   getAllOrder,
   createAssassin,
   createOrder,
@@ -37,6 +39,10 @@ router.get('/debt/:id');
  //Missions
 router.get('/Mission', getAllMissions);
 router.get('/FilteredMission', getFilteredMissions);
+router.get('/Mission/Review', getUnreviewedMissions);
+router.get('/Mission/:id/PublishedBy');
+router.get('/Mission/AssignedTo');
+
 router.post('/Mission', createMission);
 router.put('/Mission:id');
 router.put('/Mission/accept/:id', acceptMission);
@@ -54,6 +60,7 @@ router.get('/Transaction/:id');
 
  //Users
 router.get('/User', getAllUsers);
+router.get('/User/:id', getUser);
 router.get('/User/Assassin', getAllAssassins);
 router.get('/User/Order', getAllOrder);
 
@@ -62,7 +69,7 @@ router.post('/User/Order', createOrder);
 
 router.put('/User/:id', updateUser);
 router.delete('/User/:id');
-router.get('/User/:id');
+
 
   
 

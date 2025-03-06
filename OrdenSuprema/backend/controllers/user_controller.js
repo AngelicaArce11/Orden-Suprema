@@ -9,6 +9,16 @@ export const getAllUsers = async (req, res) => { //Lista de todos los usuarios r
     }
 };
 
+export const getUser = async (req, res) => { //Lista de todos los usuarios registrados
+    try {
+        const {id} = req.params
+        const user = await User.findByPk(id);
+        res.json(user);
+    } catch (error) {
+        return res.status(500).json({message: error.message});
+    }
+};
+
 export const getAllAssassins = async (req, res) => { //Lista de todos los Asesinos registrados
     try {
         const assassins = await User.scope('assassin').findAll();
