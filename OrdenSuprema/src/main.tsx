@@ -18,7 +18,6 @@ import { MissionsConfirm } from './components/HighTable/MissionsConfirm.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    {/* <MissionsConfirm/> */}
     <BrowserRouter> 
     
       <Routes>
