@@ -4,6 +4,7 @@ import { sequelize } from './database/sequelize.js';
 import dbRoutes from './routes/db_routes.js' ;
 
 
+
 const app = express();
 
 app.get('/', (req, res) =>{
