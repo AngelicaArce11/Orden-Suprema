@@ -88,7 +88,7 @@ export const MissionPage = () => {
         </div>
         {/* Tabla con las misiones */}
         <div className='w-full pt-15 px-2 sm:px-15'>
-            <TableElement header={['Nombre del objetivo', 'Descripción', 'Pago', '']} data={missions} nameButton='Aceptar' colorButton='greenToBlue' onClick={() => setOpenModal(true)}></TableElement>
+            <TableElement header={['Nombre del objetivo', 'Descripción', 'Pago', '']} data={missions} nameButton='Aceptar' colorButton='greenToBlue' onClick={() => setOpenModal(true) } />
         </div>
         {/* Modal de confirmacion o cancelacion */}
         <Modal size="md" show={openModal} onClose={() => setOpenModal(false)}>

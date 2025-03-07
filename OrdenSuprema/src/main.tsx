@@ -15,6 +15,10 @@ import { DebtsHighTable } from './components/HighTable/DebtsHighTable.tsx';
 import { DebtsAssassin } from './components/Assassin/DebtsAssassin.tsx';
 import { LocateAssassins } from './components/Global/LocateAssassins.tsx';
 import { MissionsConfirm } from './components/HighTable/MissionsConfirm.tsx';
+import { DebtsRegister } from './components/Assassin/DebtsRegister.tsx';
+import { DebtsConfirm } from './components/Assassin/DebtsConfirm.tsx';
+import {CompleteMission} from './components/Assassin/CompleteMission.tsx';
+import { DebtsPayment } from './components/Assassin/DebtsPayment.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -35,6 +39,11 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/debtsAssassin" element={<DebtsAssassin/>} />
         <Route path="/locateAssassin" element={<LocateAssassins/>} />
         <Route path="/debtsHighTable" element={<DebtsHighTable/>} />
+        <Route path="/debtsRegister" element={<DebtsRegister/>} />
+        <Route path="/debtsConfirm" element={<DebtsConfirm/>} />
+        <Route path="/completeMission" element={<CompleteMission/>} />
+        <Route path="/debtsPayment" element={<DebtsPayment/>} />  
+        <Route path="/debtsPayment" element={<DebtsPayment/>} />      
       </Routes>
 
     </BrowserRouter>
