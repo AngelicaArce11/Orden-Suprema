@@ -7,12 +7,12 @@ import { useEffect, useState } from "react";
 export const ChangeCoinsPage = () => {
     // Estado para manejar las monedas del usuario
     const [coins, setCoins] = useState(0);
-    // Estado para manejar el dinero a cambiar 
-    const [money, setMoney] = useState(0);
     // Estado para manejar el ID del asesino
     const [IDAssassin, setIdAssassin] = useState(-1);
     // Estado para notificaciones
     const [notifications, setNotifications] = useState('');
+    // Estado para manejar los datos del formulario
+    const [formData, setFormData] = useState({ money: 0});
     // Estado para actualizar la pantalla
     const [refresh, setRefresh] = useState(false);
 
@@ -25,19 +25,24 @@ export const ChangeCoinsPage = () => {
     }, [refresh])
 
     //Manejo de cambios en los inputs
-    const handleChange = (event: any) => {
-        setMoney(Number(event.target.value));
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>)=> {
+        const { name, value, type } = e.target;
+        setFormData(prevForm => {
+            return {
+                ...prevForm,
+                [name]: type === "number" ? Number(value) : value, // Convierte a número si es un input numérico
+            }
+        });
     };
 
-    const updateCoins = async (idUser: number, money: number) => {
+    const updateCoins = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         axios.
-            put(`http://localhost:3000/User/${idUser}`, 
-                {coins: changeCoins(money) }
-            )
+            put(`http://localhost:3000/User/${IDAssassin}`, {coins: changeCoins(formData.money)})
             .then((response) => {
                 localStorage.setItem("user", JSON.stringify(response.data));
                 setNotifications('Success');
-                setMoney(0);
+                setFormData({money: 0})
                 setRefresh(!refresh);
             })
             .catch((error) => {
@@ -55,7 +60,7 @@ export const ChangeCoinsPage = () => {
             {/* Formulario de publicacion */}
             <div className='flex justify-center pt-10'>
                 <div className='bg-slate-900 w-sm m-2 sm:w-4xl xl:w-7xl mb-5 rounded-lg'>
-                    <form className="flex flex-col m-10 ">
+                    <form className="flex flex-col m-10 " onSubmit={updateCoins}>
                         {/* Campos del formulario */}
                         <div className='pb-10 border-b'>
                             <Blockquote className="text-center">
@@ -70,10 +75,10 @@ export const ChangeCoinsPage = () => {
                             <div className='mb-2 block'>
                                 <Label htmlFor='pago' className='text-sm sm:text-lg' value="Cantidad de dinero:"></Label>
                             </div>
-                            <TextInput id='pago' type='number' min={0} onChange={handleChange} placeholder='Digita la cantidad de dinero a cambiar' value={money === 0 ? '': money} required></TextInput>
+                            <TextInput id='pago' type='number' name='money' min={0} onChange={handleChange} placeholder='Digita la cantidad de dinero a cambiar' value={formData.money === 0 ? '': formData.money} required></TextInput>
                         </div>
                         {/* Boton para registrar la mision */}
-                        <Button type='button' gradientDuoTone="greenToBlue" className='m-4' onClick={() => updateCoins(IDAssassin, money)}> 
+                        <Button type='submit' gradientDuoTone="greenToBlue" className='m-4'> 
                             <HiArrowPathRoundedSquare size={20} className='me-2'></HiArrowPathRoundedSquare>
                             Cambiar 
                         </Button>

@@ -21,6 +21,8 @@ export const CancelMissionPage = () => {
     const [coins, setCoins] = useState(0);
     // Estado para manejar el rol del usuario
     const [role, setRole] = useState('');
+    // Estado para conocer el ID del usuario 
+    const [IDUser, setIdUser] = useState(-1);
 
     // Obtenemos los datos de la BD 
     useEffect(() => {
@@ -47,6 +49,7 @@ export const CancelMissionPage = () => {
                 setMissions(filteredMissions)
                 setCoins(user.totalCoins);
                 setRole(user.type);
+                setIdUser(user.id);
                 }
             )
             .catch((error) => console.error("Error fetching missions:", error));
@@ -64,6 +67,11 @@ export const CancelMissionPage = () => {
         axios
             .delete(`http://localhost:3000/Mission/delete/${indexMission}`)
             .then(() => {
+
+                if (role === 'assassin') {
+                    updateCoins(IDUser);
+                }
+
                 setOpenModal(false);
                 setNotifications('Success');
                 setRefresh(!refresh);
@@ -74,6 +82,20 @@ export const CancelMissionPage = () => {
                 setNotifications('Failed');
             }
             );
+    }
+
+    // Este metodo actualiza las monedas del asesino de acuerdo con el reembolso
+    const updateCoins = async (idUser: number) => {
+        axios.
+            put(`http://localhost:3000/User/${idUser}`, 
+                {coins: refund() }
+            )
+            .then((response) => {
+                localStorage.setItem("user", JSON.stringify(response.data));
+            })
+            .catch((error) => {
+                console.error("Error update coins:", error); 
+            });
     }
 
     return (

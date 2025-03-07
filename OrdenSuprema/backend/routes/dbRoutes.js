@@ -19,6 +19,7 @@ import {
   confirmMission,
   updateMission,
   deleteMission,
+  getMissionsAssignedTo
 } from "../controllers/missionController.js";
 
 import {
@@ -48,7 +49,7 @@ router.get('/Mission', getAllMissions);
 router.get('/FilteredMission', getFilteredMissions);
 router.get('/Mission/Review', getUnreviewedMissions);
 router.get('/Mission/:id/PublishedBy');
-router.get('/Mission/AssignedTo');
+router.get('/Mission/AssignedTo/:id', getMissionsAssignedTo);
 
 router.post('/Mission', createMission);
 router.put('/Mission:id');
