@@ -2,6 +2,8 @@ import exampleIcon from '../assets/icons/user.png';
 import { Dropdown, Drawer, Sidebar  } from "flowbite-react";
 import { HiBars4,HiArrowRightOnRectangle} from "react-icons/hi2";
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+
 
 // Parametros para pasarle a la Navbar
 interface NavBarProps {
@@ -9,7 +11,13 @@ interface NavBarProps {
 }
 
 export const NavBar = ({user} :  NavBarProps) => {
+
     const [isMenuMobile, setMenuMobile] = useState(false);
+    const logout = () => {
+        localStorage.removeItem("token"); 
+        localStorage.removeItem("role");  
+        window.location.href = "/login";  
+    };
             
     return (
         <>
@@ -52,10 +60,17 @@ export const NavBar = ({user} :  NavBarProps) => {
                         </button>}
                     >
                         <div className="bg-gray-800 text-white rounded-lg">
-                            <Dropdown.Item>{user === 'assassin' ? 'Registrar deuda' : 'Registrar asesino'}</Dropdown.Item>
-                            <Dropdown.Item>{user === 'assassin' ? 'Confirmar deuda' : 'Historial de asesinos'}</Dropdown.Item>
-                            <Dropdown.Item>{user === 'assassin' ? 'Pagar deuda' : 'Deudas entre asesinos' }</Dropdown.Item>
+                            <Link to={user === 'assassin' ? "/debtsAssassin" : "/formAssassin"}>
+                                <Dropdown.Item>{user === 'assassin' ? 'Registrar deuda' : 'Registrar asesino'}</Dropdown.Item>
+                            </Link>
+        
+                            <Link to={"/history"}>
+                                <Dropdown.Item>{user === 'assassin' ? 'Confirmar deuda' : 'Historial de asesinos'}</Dropdown.Item>
+                            </Link>
 
+                            <Link to={"/debtsHighTable"}>
+                                <Dropdown.Item>{user === 'assassin' ? 'Pagar deuda' : 'Deudas entre asesinos' }</Dropdown.Item>
+                            </Link>
                             {user === 'highTable' ? (
                                 <Dropdown.Item> Ubicar asesino </Dropdown.Item>
                             ): null }
@@ -73,7 +88,7 @@ export const NavBar = ({user} :  NavBarProps) => {
 
                 
                 {/* Cerrar sesion */}
-                <a  href='#' className='absolute right-5 top-4 hidden lg:block'>
+                <a  onClick={logout} className='absolute right-5 top-4 hidden lg:block'>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-8 stroke-cyan-500">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
                     </svg>

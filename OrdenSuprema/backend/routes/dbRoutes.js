@@ -1,30 +1,40 @@
 import { Router } from "express";
-const router = Router();
+import { loginUser } from "../controllers/authController.js";  
+import { verifyToken, verifyRole } from "../middlewares/auth.js";
+
 import {
   getAllDebts,
   createDebt,
   updateDebt,
-  deleteDebt,
-} from "../controllers/debt_controller.js";
+  deleteDebt
+} from "../controllers/debtController.js";
 
 import {
   getAllMissions,
+  getFilteredMissions,
+  getUnreviewedMissions,
   createMission,
   acceptMission,
   completeMission,
   confirmMission,
   updateMission,
   deleteMission,
-} from "../controllers/mission_controller.js";
+} from "../controllers/missionController.js";
 
 import {
   getAllUsers,
   getAllAssassins,
+  getUser,
   getAllOrder,
   createAssassin,
   createOrder,
   updateUser,
-} from "../controllers/user_controller.js";
+} from "../controllers/userController.js";
+
+const router = Router();
+
+//Login
+router.post("/login", loginUser);
 
  //Debts
 router.get('/debt', getAllDebts);
@@ -35,12 +45,17 @@ router.get('/debt/:id');
 
  //Missions
 router.get('/Mission', getAllMissions);
+router.get('/FilteredMission', getFilteredMissions);
+router.get('/Mission/Review', getUnreviewedMissions);
+router.get('/Mission/:id/PublishedBy');
+router.get('/Mission/AssignedTo');
+
 router.post('/Mission', createMission);
 router.put('/Mission:id');
 router.put('/Mission/accept/:id', acceptMission);
 router.put('/Mission/complete/:id', completeMission);
 router.put('/Mission/confirm/:id', confirmMission);
-router.delete('/Mission/:id');
+router.delete('/Mission/delete/:id', deleteMission);
 router.get('/Mission/:id');
 
  //Transactions
@@ -52,15 +67,17 @@ router.get('/Transaction/:id');
 
  //Users
 router.get('/User', getAllUsers);
+router.get('/UserById/:id', getUser);
 router.get('/User/Assassin', getAllAssassins);
 router.get('/User/Order', getAllOrder);
 
-router.post('/User/Assassin', createAssassin);
+router.post('/User/Assassin', verifyToken, verifyRole(["order"]), createAssassin);
+// router.post('/User/Assassin', createAssassin);
 router.post('/User/Order', createOrder);
 
-router.put('/User/:id', updateUser);
-router.delete('/User/:id');
-router.get('/User/:id');
+router.put('/UserById/:id', updateUser);
+router.delete('/UserById/:id');
+
 
   
 
