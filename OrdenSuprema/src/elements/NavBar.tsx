@@ -68,7 +68,7 @@ export const NavBar = ({user} :  NavBarProps) => {
                                 <Dropdown.Item>{user === 'assassin' ? 'Confirmar deuda' : 'Historial de asesinos'}</Dropdown.Item>
                             </Link>
 
-                            <Link to={"/DebtsAssassin"}>
+                            <Link to={"/debtsHighTable"}>
                                 <Dropdown.Item>{user === 'assassin' ? 'Pagar deuda' : 'Deudas entre asesinos' }</Dropdown.Item>
                             </Link>
                             {user === 'highTable' ? (
