@@ -67,7 +67,7 @@ router.get('/Transaction/:id');
 
  //Users
 router.get('/User', getAllUsers);
-router.get('/User/:id', getUser);
+router.get('/UserById/:id', getUser);
 router.get('/User/Assassin', getAllAssassins);
 router.get('/User/Order', getAllOrder);
 
@@ -75,8 +75,8 @@ router.post('/User/Assassin', verifyToken, verifyRole(["order"]), createAssassin
 // router.post('/User/Assassin', createAssassin);
 router.post('/User/Order', createOrder);
 
-router.put('/User/:id', updateUser);
-router.delete('/User/:id');
+router.put('/UserById/:id', updateUser);
+router.delete('/UserById/:id');
 
 
   
