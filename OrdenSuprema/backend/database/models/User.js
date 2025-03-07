@@ -6,7 +6,7 @@ export const User = sequelize.define(
   "User",
   {
     id: {
-      type: DataTypes.UUID,
+      type: DataTypes.INTEGER,
       primaryKey: true,
       allowNull: false,
       // autoIncrement: true,
