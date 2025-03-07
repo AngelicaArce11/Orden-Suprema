@@ -71,8 +71,8 @@ router.get('/User/:id', getUser);
 router.get('/User/Assassin', getAllAssassins);
 router.get('/User/Order', getAllOrder);
 
-// router.post('/User/Assassin', verifyToken, verifyRole(["order"]), createAssassin);
-router.post('/User/Assassin', createAssassin);
+router.post('/User/Assassin', verifyToken, verifyRole(["order"]), createAssassin);
+// router.post('/User/Assassin', createAssassin);
 router.post('/User/Order', createOrder);
 
 router.put('/User/:id', updateUser);

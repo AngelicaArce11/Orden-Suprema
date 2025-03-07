@@ -54,7 +54,7 @@ const transporter = nodemailer.createTransport({
 
 // Generar la contraseña aleatoria
 const generatePassword = () => {
-    return crypto.randomBytes(Math.ceil(4)).toString("hex").slice(0, 8);
+    return crypto.randomBytes(Math.ceil(3)).toString("hex").slice(0, 6);
 };
 
 // Enviar el correo
