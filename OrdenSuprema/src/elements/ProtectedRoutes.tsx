@@ -12,7 +12,10 @@ const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
     return <Navigate to="/login" replace />;
   }
 
-  if (!allowedRoles.includes(role)) {
+  const userRoles = role.split(",");
+  const accessU = userRoles.some((roleU) => allowedRoles.includes(roleU));
+  
+  if (!accessU) {
     return <Navigate to="/login" replace />;
   }
 

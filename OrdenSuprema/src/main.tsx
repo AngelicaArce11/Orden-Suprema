@@ -16,6 +16,10 @@ import { DebtsHighTable } from './components/HighTable/DebtsHighTable.tsx';
 import { DebtsAssassin } from './components/Assassin/DebtsAssassin.tsx';
 import { LocateAssassins } from './components/Global/LocateAssassins.tsx';
 import { MissionsConfirm } from './components/HighTable/MissionsConfirm.tsx';
+import { DebtsRegister } from './components/Assassin/DebtsRegister.tsx';
+import { DebtsConfirm } from './components/Assassin/DebtsConfirm.tsx';
+import {CompleteMission} from './components/Assassin/CompleteMission.tsx';
+import { DebtsPayment } from './components/Assassin/DebtsPayment.tsx';
 import { NavBar } from "./elements/NavBar";
 import ProtectedRoute from "./elements/ProtectedRoutes";
 import PublicRoute from "./elements/PublicRoute";
@@ -53,6 +57,10 @@ const App = () => {
           <Route path="/changeCoins" element={<ChangeCoinsPage />} />
           <Route path="/debtsAssassin" element={<DebtsAssassin/>} />
           <Route path="/missionsAssassin" element={<MissionPage />} />
+          <Route path="/debtsRegister" element={<DebtsRegister/>} />
+          <Route path="/debtsConfirm" element={<DebtsConfirm/>} />
+          <Route path="/completeMission" element={<CompleteMission/>} />
+          <Route path="/debtsPayment" element={<DebtsPayment/>} />    
         </Route>
 
         {/* Rutas exclusivas para 'La Orden' */}

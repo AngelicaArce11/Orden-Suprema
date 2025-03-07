@@ -54,7 +54,7 @@ const transporter = nodemailer.createTransport({
 
 // Generar la contraseña aleatoria
 const generatePassword = () => {
-    return crypto.randomBytes(Math.ceil(4)).toString("hex").slice(0, 8);
+    return crypto.randomBytes(Math.ceil(3)).toString("hex").slice(0, 6);
 };
 
 // Enviar el correo
@@ -104,7 +104,6 @@ export const createAssassin = async (req, res) => {
         });
 
         await sendEmail(email, name, randomPassword);
-
         res.json(newUser);
     } catch (error) {
         return res.status(500).json({ message: error.message, errors: error.errors || [] });
