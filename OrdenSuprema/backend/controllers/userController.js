@@ -1,5 +1,9 @@
 import { User } from "../database/models/User.js";
 import { Op } from "sequelize";
+import nodemailer from "nodemailer";
+import dotenv from "dotenv";
+import crypto from "crypto";
+
 
 export const getAllUsers = async (req, res) => { //Lista de todos los usuarios registrados
     try {
@@ -38,9 +42,37 @@ export const getAllOrder = async (req, res) => { //Lista de todos los Miembros d
     }
 };
 
+// Configuraciones envío del correo
+dotenv.config();
+const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+    },
+});
+
+// Generar la contraseña aleatoria
+const generatePassword = (length = 6) => {
+    return crypto.randomBytes(Math.ceil(length / 2)).toString("hex").slice(0, length);
+};
+
+// Enviar el correo
+const sendEmail = async (email, name, password) => {
+    const emailData = {
+        from: "ordensupremaadm@gmail.com",
+        to: email,
+        subject: "Bienvenido a la Orden Suprema",
+        text: `¡Hola ${name}! \nEl registro de tu cuenta ha sido realizado. \nTu usuario es tu correo electrónico: ${email}. \nTu contraseña es: ${password}`,
+    };
+    await transporter.sendMail(emailData);
+    console.log(`Correo enviado a: ${email}`);
+};
+
+
 export const createAssassin = async (req, res) => {
     try {
-        const { id, name, email, password, latitude, longitude, totalCoins } = req.body
+        const { id, name, email, latitude, longitude, totalCoins } = req.body;
 
         // Verifica si el ID ya existe
         const existingUser = await User.findOne({ where: { id } });
@@ -54,18 +86,25 @@ export const createAssassin = async (req, res) => {
             return res.status(400).json({ message: "El email ya está en uso" });
         }
 
+        // Generar contraseña aleatoria para enviarla por correo
+        const randomPassword = generatePassword(); 
+        // console.log(randomPassword);
+
 
         const newUser = await User.create({
             id: id,
             name: name,
             email: email,
-            password: password,
+            password: randomPassword,
             avatar: `https://robohash.org/set_set5/bgset_bg1/${email}`,
             type: 'assassin',
             latitude: latitude,
             longitude: longitude,
             totalCoins: totalCoins
         });
+
+        await sendEmail(email, name, randomPassword);
+
         res.json(newUser);
     } catch (error) {
         return res.status(500).json({ message: error.message, errors: error.errors || [] });
