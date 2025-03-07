@@ -24,6 +24,21 @@ export const getFilteredMissions = async (req, res) => {
     }
 };
 
+// Para obtener solo las misiones de un asesino en especifico
+export const getMissionsAssignedTo = async (req, res) => {
+    try {
+        const { id } = req.params
+        const missions = await Mission.findAll({
+            where: {
+                assignedToId: id
+            }
+        });
+        res.json(missions);
+    } catch (error) {
+        return res.status(500).json({message: error.message});
+    }
+};
+
 // Para obtener solo las misiones que no han sido revisadas por la orden
 export const getUnreviewedMissions = async (req, res) => {
     try {
@@ -42,6 +57,7 @@ export const getUnreviewedMissions = async (req, res) => {
 export const createMission = async (req, res) => {
     try {
         const {targetName, description, paymentValue, publishedById} = req.body
+        console.log(req.body);
         const newMission = await Mission.create({
             targetName: targetName,
             description: description,
