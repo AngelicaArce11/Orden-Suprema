@@ -10,6 +10,8 @@ export const MissionPage = () => {
     const [openModal, setOpenModal] = useState(false);
     // Estado que contiene las misiones disponibles para que el asesino las acepte
     const [missions, setMissions] = useState<Mission[]>([]);
+    // Estado que contiene las misiones asignadas al asesino y que estan en progreso
+    const [missionsAssassin, setMissionsAssassin] = useState<Mission[]>([]);
     // Estado para manejar la aceptacion de una mision, tiene el indice de la fila de la mision a aceptar
     const [accept, setAccept] = useState<number>();
     // Estado para actualizar la pantalla
@@ -29,6 +31,16 @@ export const MissionPage = () => {
                 const data = localStorage.getItem("user");
                 const user = data ? JSON.parse(data) : null;
 
+                // Hacemos otra peticion para conocer las misiones que han sido asignadas al asesino
+                axios
+                    .get(`http://localhost:3000/Mission/AssignedTo/${user.id}`)
+                    .then((response) => {
+                        setMissionsAssassin(response.data.filter((mission: any) => 
+                            mission.status === 'in_progress'
+                        ));
+                    })
+                    .catch((error) => console.error("Error fetching missions assassin :", error));
+
                 setMissions(
                     // Mapeamos para obtener los atributos que queremos presentar en la pagina
                     response.data.map((mission: any) => ({
@@ -39,7 +51,6 @@ export const MissionPage = () => {
                     })
                     )
                 )
-
                 // Obtenemos el id del usuario
                 setIdAssassin(user.id);
                 }
@@ -47,6 +58,7 @@ export const MissionPage = () => {
             )
             .catch((error) => console.error("Error fetching missions:", error));
     }, [refresh]);
+
 
     // Este metodo sirve para obtener la fila de la mision que se esta aceptando
     const clickAccept = (row: number) => {
@@ -121,13 +133,21 @@ export const MissionPage = () => {
                 <Modal.Body>
                     <div className='text-center'>
                         <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-200" />
+                        {}
                         <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                            ¿ Estás seguro de aceptar la realización de esta misión ?
+                            {missionsAssassin.length === 3 ? 'Ya tienes tres misiones asignadas que están en progreso. No es posible asignarte más.' : '¿ Estás seguro de aceptar esta misión ?'}
                         </h3>
                     </div>
                     <div className="flex justify-center gap-4">
-                        <Button outline size='md' gradientDuoTone="greenToBlue" onClick={() => accept !== undefined ? acceptMission(missions[accept].id) : setOpenModal(false)}>  Sí, estoy seguro </Button>
-                        <Button outline size='md' gradientDuoTone="pinkToOrange" onClick={() => setOpenModal(false)}>  Cancelar </Button>
+
+                        {missionsAssassin.length === 3 ? (
+                            <Button outline size='md' gradientDuoTone="greenToBlue" onClick={() => setOpenModal(false)}>  Aceptar </Button>
+                        ) : (
+                            <>  
+                                <Button outline size='md' gradientDuoTone="greenToBlue" onClick={() => accept !== undefined ? acceptMission(missions[accept].id) : setOpenModal(false)}>  Sí, estoy seguro </Button>
+                                <Button outline size='md' gradientDuoTone="pinkToOrange" onClick={() => setOpenModal(false)}>  Cancelar </Button>
+                            </>
+                        )}
                     </div>
                 </Modal.Body>
             </Modal>
