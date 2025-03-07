@@ -145,10 +145,11 @@ export const createOrder = async (req, res) => {
 export const updateUser = async (req, res) => {
     try { //Pendiente por implementar
     const { id } = req.params;
-    const {set} = req.body
+    const {set, coins} = req.body
 
     const user = await User.findByPk(id);
     user.avatar = `https://robohash.org/set_set${set}/bgset_bg1/${user.email}`;
+    user.totalCoins += coins;
     await user.save();
 
     res.json(user); 

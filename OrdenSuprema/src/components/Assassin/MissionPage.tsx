@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { NavBar } from "../../elements/NavBar";
 import { TableElement } from "../../elements/Table";
 import { Button, Modal, Toast, Alert } from "flowbite-react";
 import {HiOutlineExclamationCircle, HiCheckCircle, HiXCircle, HiInformationCircle } from "react-icons/hi2";
@@ -17,21 +16,35 @@ export const MissionPage = () => {
     const [refresh, setRefresh] = useState(false);
     // Estado para notificaciones
     const [notifications, setNotifications] = useState('');
+    // Estado para manejar el ID del asesino
+    const [IDAssassin, setIdAssassin] = useState(null);
 
     // Obtenemos los datos de la BD 
     useEffect(() => {
         axios
             .get("http://localhost:3000/FilteredMission")
-            .then((response) => setMissions(
-                // Mapeamos para obtener los atributos que queremos presentar en la pagina
-                response.data.map((mission: any) => ({
-                    id: mission.id,
-                    targetName: mission.targetName,
-                    description: mission.description,
-                    paymentValue: mission.paymentValue
-                })
+            .then((response) => {
+
+                // Obtenemos al usuario
+                const data = localStorage.getItem("user");
+                const user = data ? JSON.parse(data) : null;
+
+                setMissions(
+                    // Mapeamos para obtener los atributos que queremos presentar en la pagina
+                    response.data.map((mission: any) => ({
+                        id: mission.id,
+                        targetName: mission.targetName,
+                        description: mission.description,
+                        paymentValue: mission.paymentValue
+                    })
+                    )
                 )
-            ))
+
+                // Obtenemos el id del usuario
+                setIdAssassin(user.id);
+                }
+                
+            )
             .catch((error) => console.error("Error fetching missions:", error));
     }, [refresh]);
 
@@ -43,11 +56,12 @@ export const MissionPage = () => {
 
     // Este metodo se encarga de realizar la actualizacion en la BD de la mision que ha sido aceptada
     const acceptMission = async (indexMission: number) => {
+
         // Asignamos la mision al asesino 
         axios
             .put(
                 `http://localhost:3000/Mission/accept/${indexMission}`, 
-                { assignedToId: 2}
+                { assignedToId: IDAssassin}
             )
             .then(() => {
                 setOpenModal(false);
@@ -64,8 +78,6 @@ export const MissionPage = () => {
 
     return (
         <>
-            <NavBar user='assassin'/>
-
             {/* Titulo de la pagina */}
             <div className='flex justify-center items-center mt-30'>
                 <h5 className='text-white font-bold text-2xl lg:text-5xl'> Misiones Publicadas </h5>

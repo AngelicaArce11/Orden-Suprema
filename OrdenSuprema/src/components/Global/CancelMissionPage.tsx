@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { NavBar } from "../../elements/NavBar";
 import { TableElement } from "../../elements/Table";
 import { Button, Modal, Toast, Alert } from "flowbite-react";
 import {HiOutlineExclamationCircle, HiCurrencyDollar, HiCheckCircle, HiXCircle, HiInformationCircle} from "react-icons/hi2";
 import axios from "axios";
+import {refund} from "../../services/refund";
 
 export const CancelMissionPage = () => {
 
@@ -17,27 +17,38 @@ export const CancelMissionPage = () => {
     const [cancel, setCancel] = useState<number>();
     // Estado para notificaciones
     const [notifications, setNotifications] = useState('');
-
-    // Obtenemos el tipo de usuario
-    const user = 'highTable';
-    // Monedas del usuario
-    const coins = 40;
+    // Estado para manejar las monedas del usuario
+    const [coins, setCoins] = useState(0);
+    // Estado para manejar el rol del usuario
+    const [role, setRole] = useState('');
 
     // Obtenemos los datos de la BD 
     useEffect(() => {
         axios
             .get("http://localhost:3000/FilteredMission")
-            .then((response) => setMissions(
-                // Mapeamos para obtener los atributos que queremos presentar en la pagina
-                response.data.map((mission: any) => ({
+            .then((response) =>  {
+                const data = localStorage.getItem("user");
+                const user = data ? JSON.parse(data) : null;
+
+                let filteredMissions = response.data.map((mission: any) => ({
                     id: mission.id,
+                    publishedById: mission.publishedById ,
                     targetName: mission.targetName,
                     description: mission.description,
                     status: 'Sin asignar',
-                    paymentValue: mission.paymentValue
-                })
-                )
-            ))
+                    paymentValue: mission.paymentValue,
+                }));
+
+                // Si el usuario es asesino, filtramos antes de actualizar el estado
+                if (user?.type === 'assassin') {
+                    filteredMissions = filteredMissions.filter((mission: any) => mission.publishedById === user.id);
+                }
+
+                setMissions(filteredMissions)
+                setCoins(user.totalCoins);
+                setRole(user.type);
+                }
+            )
             .catch((error) => console.error("Error fetching missions:", error));
     }, [refresh]);
 
@@ -47,7 +58,7 @@ export const CancelMissionPage = () => {
         setOpenModal(true);
     };
 
-    // Este metodo se encarga de realizar la actualizacion en la BD de la mision que ha sido aceptada
+    // Este metodo se encarga de realizar la actualizacion en la BD de la mision que ha sido cancelada
     const cancelMission = async (indexMission: number) => {
         // Asignamos la mision al asesino 
         axios
@@ -65,10 +76,8 @@ export const CancelMissionPage = () => {
             );
     }
 
-
     return (
         <>
-            <NavBar user={user}></NavBar>
             {/* Titulo de la pagina */}
             <div className='flex justify-center items-center mt-30'>
                 <h5 className='text-white font-bold text-2xl lg:text-5xl'> Cancelar Misión </h5>
@@ -85,7 +94,7 @@ export const CancelMissionPage = () => {
                 <>  
                     {/* Tabla con las misiones */}
                     <div className='w-full pt-15 px-2 sm:px-15'>
-                        <TableElement header={['Nombre del objetivo', 'Descripción', 'Estado', 'Pago', '']} data={missions.map(({ id, ...rest }) => rest)} nameButton='Cancelar' colorButton='pinkToOrange' onClick={clickCancel} ></TableElement>
+                        <TableElement header={['Nombre del objetivo', 'Descripción', 'Estado', 'Pago', '']} data={missions.map(({id, publishedById, ...rest }) => rest)} nameButton='Cancelar' colorButton='pinkToOrange' onClick={clickCancel} ></TableElement>
                     </div>
                 </>
             )}
@@ -116,7 +125,7 @@ export const CancelMissionPage = () => {
                             ¿ Estás seguro de cancelar esta misión ?
                         </h3>
                     </div>
-                    {user === 'assassin' ? (
+                    {role === 'assassin' ? (
                         <>
                             <div className='flex justify-end'>
                                 <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
@@ -126,7 +135,7 @@ export const CancelMissionPage = () => {
                             </div>
                             <div className='text-center'>
                                 <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                                    Se te va a realizar un desembolso de 40 monedas.
+                                    Se te va a realizar un desembolso de {refund()} monedas.
                                 </h3>
                             </div>
                         </>

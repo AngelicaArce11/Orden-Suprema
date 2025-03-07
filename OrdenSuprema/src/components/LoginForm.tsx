@@ -30,7 +30,7 @@ export const  Login = ({ setUserRole }: { setUserRole: (role: string | null) => 
         // Guarda el token y el rol en localStorage
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("role", response.data.role);
-       
+        localStorage.setItem("user", JSON.stringify(response.data.user));
         setUserRole(response.data.role);
 
         // Redirecciona al usuario según su rol

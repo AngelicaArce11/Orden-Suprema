@@ -1,15 +1,53 @@
-import { NavBar } from "../../elements/NavBar";
-import { Button, Label, TextInput, Blockquote } from "flowbite-react";
-import { HiCurrencyDollar, HiArrowPathRoundedSquare } from "react-icons/hi2";
+import { Button, Label, TextInput, Blockquote, Toast } from "flowbite-react";
+import { HiCurrencyDollar, HiArrowPathRoundedSquare, HiXCircle, HiCheckCircle } from "react-icons/hi2";
+import axios from "axios";
+import { changeCoins } from "../../services/changeCoins";
+import { useEffect, useState } from "react";
 
 export const ChangeCoinsPage = () => {
+    // Estado para manejar las monedas del usuario
+    const [coins, setCoins] = useState(0);
+    // Estado para manejar el dinero a cambiar 
+    const [money, setMoney] = useState(0);
+    // Estado para manejar el ID del asesino
+    const [IDAssassin, setIdAssassin] = useState(-1);
+    // Estado para notificaciones
+    const [notifications, setNotifications] = useState('');
+    // Estado para actualizar la pantalla
+    const [refresh, setRefresh] = useState(false);
 
-    // Monedas del asesino
-    const coins = 500000; 
+    useEffect(() =>{
+        // Obtenemos al usuario
+        const data = localStorage.getItem("user");
+        const user = data ? JSON.parse(data) : null;
+        setCoins(user.totalCoins);
+        setIdAssassin(user.id);
+    }, [refresh])
+
+    //Manejo de cambios en los inputs
+    const handleChange = (event: any) => {
+        setMoney(Number(event.target.value));
+    };
+
+    const updateCoins = async (idUser: number, money: number) => {
+        axios.
+            put(`http://localhost:3000/User/${idUser}`, 
+                {coins: changeCoins(money) }
+            )
+            .then((response) => {
+                localStorage.setItem("user", JSON.stringify(response.data));
+                setNotifications('Success');
+                setMoney(0);
+                setRefresh(!refresh);
+            })
+            .catch((error) => {
+                console.error("Error update coins:", error); 
+                setNotifications('Failed');
+            });
+    }
 
     return (
         <>
-            <NavBar user='assassin'></NavBar>
             {/* Titulo de la pagina */}
             <div className='flex justify-center items-center mt-30'>
                 <h5 className='text-white font-bold text-2xl lg:text-5xl'> Cambiar Monedas </h5>
@@ -32,16 +70,33 @@ export const ChangeCoinsPage = () => {
                             <div className='mb-2 block'>
                                 <Label htmlFor='pago' className='text-sm sm:text-lg' value="Cantidad de dinero:"></Label>
                             </div>
-                            <TextInput id='pago' type='number' min={1}  placeholder='Digita la cantidad de dinero a cambiar' required></TextInput>
+                            <TextInput id='pago' type='number' min={0} onChange={handleChange} placeholder='Digita la cantidad de dinero a cambiar' value={money === 0 ? '': money} required></TextInput>
                         </div>
                         {/* Boton para registrar la mision */}
-                        <Button type='submit' gradientDuoTone="redToYellow" className='m-4'> 
+                        <Button type='button' gradientDuoTone="greenToBlue" className='m-4' onClick={() => updateCoins(IDAssassin, money)}> 
                             <HiArrowPathRoundedSquare size={20} className='me-2'></HiArrowPathRoundedSquare>
                             Cambiar 
                         </Button>
                     </form>
                 </div>
             </div>
+
+            {/* Notificaciones de lo que ocurre con la asignacion de la mision */}
+            {notifications && notifications !== '' ? (
+                <Toast className='absolute right-4 bottom-4'>
+                    {notifications === 'Success' ? (
+                        <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-800 text-green-200">
+                            <HiCheckCircle className="h-5 w-5" />
+                        </div>
+                    ) : (
+                        <div className='inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-800 text-red-200'> 
+                            <HiXCircle className="h-5 w-5" />
+                        </div>
+                    )}
+                    <div className="ml-3 text-sm font-normal">{notifications === 'Success' ? 'Monedas actualizadas exitosamente.' : 'No se ha podido actualizar las monedas.'}</div>
+                    <Toast.Toggle onClick={() => setNotifications('')} />
+                </Toast> 
+            ) : null } 
         </>
     );
 }

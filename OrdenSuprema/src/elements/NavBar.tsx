@@ -17,7 +17,7 @@ export const NavBar = ({user} :  NavBarProps) => {
         localStorage.removeItem("token"); 
         localStorage.removeItem("role");  
         window.location.href = "/login";  
-      };
+    };
             
     return (
         <>
