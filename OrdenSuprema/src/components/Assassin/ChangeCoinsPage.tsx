@@ -38,7 +38,7 @@ export const ChangeCoinsPage = () => {
     const updateCoins = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         axios.
-            put(`http://localhost:3000/User/${IDAssassin}`, {coins: changeCoins(formData.money)})
+            put(`http://localhost:3000/UserById/${IDAssassin}`, {coins: changeCoins(formData.money)})
             .then((response) => {
                 localStorage.setItem("user", JSON.stringify(response.data));
                 setNotifications('Success');
