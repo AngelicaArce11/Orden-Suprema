@@ -16,7 +16,7 @@ export const MissionPostPage = () => {
 
     return(
         <>
-            <NavBar user={user}></NavBar>
+            {/* <NavBar user={user}></NavBar> */}
             {/* Titulo de la pagina */}
             <div className='flex justify-center items-center mt-30'>
                 <h5 className='text-white font-bold text-2xl lg:text-5xl'> Publicar Misión </h5>
