@@ -81,9 +81,12 @@ export const TableElement = ({ header, data, showModalColumn = false, buttons }:
             </Table.Body>
         </Table>
 
-            {/* Botones de paginación */}
-            <div className="flex pt-5 mb-5 justify-center">
-                <Pagination layout="navigation" previousLabel='Anterior' nextLabel='Siguiente' currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} showIcons />
+           {/* Botones de paginacion */}
+           <div className="flex pt-5 mb-5 justify-center">
+                {totalPages !== 1 ? (
+                    <Pagination layout="navigation" previousLabel='Anterior' nextLabel='Siguiente' currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} showIcons />
+                    ) : null
+                }
             </div>
 
             {/* Modal para ver el comprobante */}
