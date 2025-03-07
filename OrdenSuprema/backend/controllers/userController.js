@@ -104,7 +104,6 @@ export const createAssassin = async (req, res) => {
         });
 
         await sendEmail(email, name, randomPassword);
-
         res.json(newUser);
     } catch (error) {
         return res.status(500).json({ message: error.message, errors: error.errors || [] });
