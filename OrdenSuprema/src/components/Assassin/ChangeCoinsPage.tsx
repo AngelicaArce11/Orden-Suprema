@@ -31,7 +31,7 @@ export const ChangeCoinsPage = () => {
 
     const updateCoins = async (idUser: number, money: number) => {
         axios.
-            put(`http://localhost:3000/User/${idUser}`, 
+            put(`http://localhost:3000/UserById/${idUser}`, 
                 {coins: changeCoins(money) }
             )
             .then((response) => {

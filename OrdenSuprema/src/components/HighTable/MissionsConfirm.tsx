@@ -1,7 +1,8 @@
 import { MissionToConfirm } from "./MissionToConfirm";
-import { NavBar } from "../../elements/NavBar";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Alert } from "flowbite-react";
+import { HiInformationCircle } from "react-icons/hi2";
 
 export const MissionsConfirm = () => {
   const [missions, setMissions] = useState([]);
@@ -19,15 +20,27 @@ export const MissionsConfirm = () => {
 
   return (
     <>
-      <NavBar user={"yo"} />
       <div className="mt-20">
-      {missions.length === 0 ? (
-          <div className="text-center text-xl mt-10">
-            No hay misiones completadas pendientes por revisar.
+        {missions.length === 0 ? (
+          <div className="flex justify-center items-center mt-30">
+            <Alert
+              color="failure"
+              icon={() => (<HiInformationCircle  size={30} className="m-2"/>
+              )}
+            >
+              <span className="font-semibold text-sm lg:text-xl ">
+                No hay misiones completadas pendientes por revisar.
+              </span>
+            </Alert>
           </div>
-        ) : (missions.map((mission: Mission) => (
-          <MissionToConfirm mission={mission} onMissionUpdated={fetchMissions} />
-        )))}
+        ) : (
+          missions.map((mission: Mission) => (
+            <MissionToConfirm
+              mission={mission}
+              onMissionUpdated={fetchMissions}
+            />
+          ))
+        )}
       </div>
     </>
   );

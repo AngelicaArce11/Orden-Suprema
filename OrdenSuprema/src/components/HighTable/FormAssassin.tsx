@@ -53,7 +53,7 @@ export const FormAssassin=()=> {
       });
 
     } catch (error) {
-      alert("Error en el registro. Asegúrate de que el asesino no esté registrado");
+      alert(error);
     }
   };
 

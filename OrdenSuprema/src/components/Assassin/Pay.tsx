@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 
 interface PayProps {
@@ -9,18 +10,31 @@ interface PayProps {
 export const Pay = ({ message, payValue = 50, onSuccess }: PayProps) => {
   const [success, setSuccess] = useState<boolean|null>(null);
 
-  const handleClick = (target: React.MouseEvent<HTMLButtonElement>) => {
+
+  const handleClick = async (target: React.MouseEvent<HTMLButtonElement>) => {
     const btton = target.currentTarget;
-    //If user can afford to be included
-    if (payValue > 0){
-        setSuccess(true);
-        onSuccess && onSuccess(true)
-        //Make the transaction on the user money
-        return
+
+    // se revisa si el pago es una suma valida y el usuario tiene suficiente para pagarlo
+    if (payValue > 0 && JSON.parse(localStorage.user).totalCoins >= payValue) {
+      axios
+        .put(`http://localhost:3000/UserById/${JSON.parse(localStorage.user).id}`, {
+          coins: payValue * -1,
+        })
+        .then((response) => {
+          localStorage.setItem("user", JSON.stringify(response.data));
+          setSuccess(true);
+          onSuccess && onSuccess(true);
+          return;
+        })
+        .catch((error) => {
+          console.error("Error update coins:", error);
+          
+        });
     }
-    btton.className = "inline-block rounded-lg bg-red-500 px-8 py-3 text-center text-sm font-semibold !text-white outline-none ring-indigo-300 transition duration-100  md:text-base"
-    setSuccess(false);
-    onSuccess && onSuccess(false);
+    btton.className =
+            "inline-block rounded-lg bg-red-500 px-8 py-3 text-center text-sm font-semibold !text-white outline-none ring-indigo-300 transition duration-100  md:text-base";
+          setSuccess(false);
+          onSuccess && onSuccess(false);
   };
 
   return (
@@ -32,7 +46,7 @@ export const Pay = ({ message, payValue = 50, onSuccess }: PayProps) => {
             {success === false &&
             <>
               <p className="text-white inline">No tienes suficientes monedas. </p>
-              <a href="#" className="inline">Recargar más</a>
+              <a href="/changeCoins" className="inline">Recargar más</a>
               </>
             }
         </div>
