@@ -6,7 +6,7 @@ interface TableElementProps {
     header: string[];
     data: object[];
     showModalColumn?: boolean;
-    buttons?: { name: string, color: string, onClick: () => void }[];
+    buttons?: (id: number) => { name: string; color: string; onClick: () => void }[];
 }
 
 export const TableElement = ({ header, data, showModalColumn = false, buttons }: TableElementProps) => {
@@ -61,7 +61,7 @@ export const TableElement = ({ header, data, showModalColumn = false, buttons }:
                             </Table.Cell>
                             {buttons && (
                                 <Table.Cell className="text-center flex flex-wrap justify-center items-center space-x-2">
-                                    {buttons.map((button, index) => (
+                                    {buttons && buttons(row.id)?.map((button, index) => (
                                         <Button
                                             key={index}
                                             outline

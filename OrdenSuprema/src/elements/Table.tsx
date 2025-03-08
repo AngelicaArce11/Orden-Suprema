@@ -9,10 +9,10 @@ interface TableElementProps {
     colorButton?: string;
     onClick?: (parameter: any) => void;
     showFileInput?: boolean;
-    onFileChange?: (event: any) => void;
+    onFileChange?: (rowIndex: number, file: File | null) => void;
 }
 
-export const TableElement = ({ header, data, nameButton, colorButton, onClick, showFileInput }: TableElementProps) => {
+export const TableElement = ({ header, data, nameButton, colorButton, onClick, showFileInput, onFileChange }: TableElementProps) => {
 
     // Estado para manejar la paginación
     const [currentPage, setCurrentPage] = useState(1);
@@ -38,7 +38,7 @@ export const TableElement = ({ header, data, nameButton, colorButton, onClick, s
 
     return (
         <>
-            <Table hoverable className='table-fixed '>
+            <Table hoverable className='table-fixed'>
                 <Table.Head>
                     {header.map((value, index) => (
                         <Table.HeadCell key={index} className='break-words p-2'>{value}</Table.HeadCell>
@@ -69,12 +69,9 @@ export const TableElement = ({ header, data, nameButton, colorButton, onClick, s
                                             id={`file-upload-${rowIndex}`}
                                             helperText="SVG, PNG, JPG o GIF (MAX. 800x400px)."
                                             onChange={(e) =>
-                                                setFiles({
-                                                    ...files,
-                                                    [rowIndex]: e.target.files ? e.target.files[0] : null
-                                                })
+                                                onFileChange && onFileChange(rowIndex, e.target.files ? e.target.files[0] : null)
                                             }
-                                        />
+                                        />   
                                     </Table.Cell>
                                 )}
 
@@ -87,7 +84,6 @@ export const TableElement = ({ header, data, nameButton, colorButton, onClick, s
                                             
                                             gradientDuoTone={colorButton}
                                             onClick={() => onClick && onClick(rowIndex)}
-                                            disabled={showFileInput && !files[rowIndex]}
                                         >
                                             {nameButton}
                                         </Button>

@@ -12,7 +12,7 @@ import {
   getDebtsWithoutProof,
   updateDebtWithProof,
   getDebtImage,
-  confirmDebt
+  payDebt
 } from "../controllers/debtController.js";
 
 import {
@@ -56,12 +56,11 @@ router.put('/debt/:id', updateDebt);
 router.delete('/debt/:id', deleteDebt);
 router.get('/debt/:id/creditor', getDebtByCreditorId);
 router.get('/debt/:id/debtor', getDebtByDebtorId);
-router.get('/debt/:id/no-proof', getDebtsWithoutProof);  
-router.put('/debt/:debtId/proof', updateDebtWithProof);  
-
-
 router.put('/debt/complete/:id', uploadMiddleware, confirmDebt);
 router.get('/debt/image/:id', getDebtImage);
+router.get('/debt/:id/no-proof', getDebtsWithoutProof);  
+router.put('/debt/:debtId/proof', updateDebtWithProof);  
+router.put('/debt/pay/:id', uploadMiddleware, payDebt);
 
  //Missions
 router.get('/Mission', getAllMissions);
