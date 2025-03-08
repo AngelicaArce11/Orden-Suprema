@@ -144,7 +144,7 @@ export const createOrder = async (req, res) => {
 export const updateUserCoins = async (req, res) => {
     try { //Para actualizar el saldo
     const { id } = req.params;
-    const {set, coins} = req.body
+    const { coins } = req.body
 
     const user = await User.findByPk(id);
     user.totalCoins += coins;
