@@ -87,7 +87,7 @@ export const CancelMissionPage = () => {
     // Este metodo actualiza las monedas del asesino de acuerdo con el reembolso
     const updateCoins = async (idUser: number) => {
         axios.
-            put(`http://localhost:3000/User/${idUser}`, 
+            put(`http://localhost:3000/UserById/${idUser}`, 
                 {coins: refund() }
             )
             .then((response) => {

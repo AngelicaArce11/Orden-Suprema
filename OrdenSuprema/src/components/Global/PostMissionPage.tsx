@@ -74,7 +74,7 @@ export const MissionPostPage = () => {
     // Actualizar las monedas del usuario en caso de ser asesino
     const updateCoins = async (idUser: number) => {
         axios.
-            put(`http://localhost:3000/User/${idUser}`, 
+            put(`http://localhost:3000/UserById/${idUser}`, 
                 {coins: -payment }
             )
             .then((response) => {
