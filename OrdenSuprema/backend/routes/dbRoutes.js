@@ -29,7 +29,8 @@ import {
   getAllOrder,
   createAssassin,
   createOrder,
-  updateUser,
+  updateUserCoins,
+  updateUserLocation
 } from "../controllers/userController.js";
 
 const router = Router();
@@ -76,7 +77,8 @@ router.post('/User/Assassin', verifyToken, verifyRole(["order"]), createAssassin
 // router.post('/User/Assassin', createAssassin);
 router.post('/User/Order', createOrder);
 
-router.put('/UserById/:id', updateUser);
+router.put('/UserById/:id', updateUserCoins);
+router.put('/UserById/location/:id', updateUserLocation);
 router.delete('/UserById/:id');
 
 
