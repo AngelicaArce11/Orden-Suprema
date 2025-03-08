@@ -26,15 +26,18 @@ import PublicRoute from "./elements/PublicRoute";
 
 
 const App = () => {
+  // Estado para conocer el usuario
   const [userRole, setUserRole] = useState<string | null>(null);
+  const [user, setUser] = useState(null);
 
   // Actualizacion del rol para el navbar en el inicio de sesión
   useEffect(() => {
 
     setUserRole(localStorage.getItem("role"));
-    const handleStorageChange = () => {
+      const handleStorageChange = () => {
       setUserRole(localStorage.getItem("role")); 
     };
+
     window.addEventListener("storage", handleStorageChange);
     
     return () => {
