@@ -8,7 +8,9 @@ import {
   updateDebt,
   deleteDebt,
   getDebtByCreditorId,
-  getDebtByDebtorId,
+  getDebtByDebtorId, 
+  getDebtsWithoutProof,
+  updateDebtWithProof,
   getDebtImage,
   confirmDebt
 } from "../controllers/debtController.js";
@@ -25,6 +27,7 @@ import {
   updateMission,
   deleteMission,
   getMissionsAssignedTo,
+  getMissionsAssignedToByStatus,
   uploadMiddleware
 } from "../controllers/missionController.js";
 
@@ -52,8 +55,14 @@ router.put('/debt/:id', updateDebt);
 router.delete('/debt/:id', deleteDebt);
 router.get('/debt/:id/creditor', getDebtByCreditorId);
 router.get('/debt/:id/debtor', getDebtByDebtorId);
-router.put('/Mission/complete/:id', uploadMiddleware, confirmDebt);
-router.get('/Debt/image/:id', getDebtImage);
+router.put('/debt/complete/:id', uploadMiddleware, confirmDebt);
+router.get('/debt/image/:id', getDebtImage);
+router.get('/debt/:id/no-proof', getDebtsWithoutProof);  
+router.put('/debt/:debtId/proof', updateDebtWithProof);  
+
+
+router.put('/debt/complete/:id', uploadMiddleware, confirmDebt);
+
 
  //Missions
 router.get('/Mission', getAllMissions);
@@ -61,16 +70,17 @@ router.get('/FilteredMission', getFilteredMissions);
 router.get('/Mission/Review', getUnreviewedMissions);
 router.get('/Mission/:id/PublishedBy');
 router.get('/Mission/AssignedTo/:id', getMissionsAssignedTo);
+router.get('/Mission/AssignedTo/:id/status', getMissionsAssignedToByStatus);
 router.get('/Mission/image/:id', getMissionImage);
 
 
 router.post('/Mission', createMission);
-router.put('/Mission:id');
 router.put('/Mission/accept/:id', acceptMission);
 router.put('/Mission/complete/:id', uploadMiddleware, completeMission);
 router.put('/Mission/confirm/:id', confirmMission);
 router.delete('/Mission/delete/:id', deleteMission);
 router.get('/Mission/:id');
+router.put('/Mission/submitProof/:userId', updateDebtWithProof);
 
  //Users
 router.get('/User', getAllUsers);

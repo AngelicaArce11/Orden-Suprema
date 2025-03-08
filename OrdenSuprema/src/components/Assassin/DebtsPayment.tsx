@@ -1,64 +1,233 @@
-import { useState } from 'react';
-import { NavBar } from "../../elements/NavBar";
+// import { useState } from 'react';
+// import { TableElement } from "../../elements/Table";
+// import { ConfirmationModal } from "../../elements/ConfirmationModal";
+
+// const missions = [
+//     { creditorId: 'Marco Botton', description: 'Eliminar al objetivo sin ser detectado y recuperar documentos clasificados.', is_completed: 'incompleto' },
+//     { creditorId: 'Carmen Flores', description: 'Rescatar a un científico clave secuestrado.', is_completed: 'incompleto' }
+// ];
+
+
+// export const DebtsPayment = () => {
+//     const [openModal, setOpenModal] = useState(false);
+
+//     const toggleModal = () => setOpenModal((prev) => !prev);
+
+//     return (
+//         <>
+            
+//             <div className='flex justify-center items-center mt-30'>
+//                 <h5 className='text-white font-bold text-2xl lg:text-5xl'>
+//                     Pagar Deudas
+//                 </h5>
+//             </div>
+
+//             {/* Tabla con las misiones */}
+//             <div className='w-full pt-15 px-2 sm:px-15'>
+//                 <TableElement
+//                     header={['Nombre del Acreedor', 'Descripción', 'Estado', '', '']}
+//                     showFileInput={true}
+//                     data={missions}
+//                     nameButton='Enviar'
+//                     colorButton='greenToBlue'
+//                     onClick={toggleModal}
+//                 />
+//             </div>
+
+//             {/* Modal de confirmación */}
+//             <ConfirmationModal
+//                 open={openModal}
+//                 onClose={toggleModal}
+//                 onConfirm={toggleModal}
+//             />
+//         </>
+//     );
+// }
+
+// import { useEffect, useState } from 'react';
+// import axios from 'axios';
+// import { TableElement } from "../../elements/Table";
+// import { ConfirmationModal } from "../../elements/ConfirmationModal";
+
+// export const DebtsPayment = () => {
+//     const [openModal, setOpenModal] = useState(false);
+//     const [missions, setMissions] = useState([]);
+//     const [selectedDebtId, setSelectedDebtId] = useState(null);
+//     const [proofImage, setProofImage] = useState(null);
+
+//     // Obtenemos al usuario
+//     const data = localStorage.getItem("user");
+//     const userId = data ? JSON.parse(data).id : null;
+
+//     // Obtener las deudas con `proof_image` en NULL
+//     useEffect(() => {
+//         if (!userId) return;
+
+//         axios.get(`http://localhost:3000/debt/${userId}/no-proof`)
+//             .then(({ data }) => setMissions(data))
+//             .catch(error => console.error('Error al obtener deudas:', error));
+//     }, [userId]);
+
+//     // Manejar la carga del comprobante de pago
+//     const handleFileChange = (event) => {
+//         const file = event.target.files[0];
+//         if (file) {
+//             const reader = new FileReader();
+//             reader.onloadend = () => {
+//                 setProofImage(reader.result); // Guardar la imagen como Base64
+//             };
+//             reader.readAsDataURL(file);
+//         }
+//     };
+
+//     // Manejar el envío del comprobante de pago
+//     const handleSendProof = async () => {
+//         if (!proofImage) {
+//             alert("Por favor, selecciona un comprobante antes de enviar.");
+//             return;
+//         }
+
+//         try {
+//             await axios.put(
+//                 `http://localhost:3000/debt/${selectedDebtId}/proof`,
+//                 { proof_image: proofImage }  // Enviar el comprobante en el body
+//             );
+
+//             alert('Comprobante enviado con éxito.');
+//             setOpenModal(false);
+
+//             // Recargar la lista de misiones
+//             axios.get(`http://localhost:3000/debt/${userId}/no-proof`)
+//                 .then(({ data }) => setMissions(data));
+//         } catch (error) {
+//             console.error('Error al enviar el comprobante:', error);
+//             alert('Error al enviar el comprobante. Intenta de nuevo.');
+//         }
+//     };
+
+//     // Abrir el modal y capturar el ID de la deuda seleccionada
+//     const handleOpenModal = (debtId) => {
+//         setSelectedDebtId(debtId);
+//         setOpenModal(true);
+//     };
+
+//     return (
+//         <>
+//             <div className='flex justify-center items-center mt-30'>
+//                 <h5 className='text-white font-bold text-2xl lg:text-5xl'>
+//                     Pagar Deudas
+//                 </h5>
+//             </div>
+
+//             {/* Tabla con las deudas */}
+//             <div className='w-full pt-15 px-2 sm:px-15'>
+//                 <TableElement
+//                     header={['Nombre del Acreedor', 'Descripción', 'Estado', '', '', '']}
+//                     showFileInput={true} // Mostrar el campo para subir comprobantes
+//                     onFileChange={handleFileChange} // Guardar la imagen seleccionada
+//                     data={missions.map(({ creditorId, description, is_completed, id }) => ({
+//                         creditorId,
+//                         description,
+//                         status: is_completed ? 'Completada' : 'Incompleta',
+                        
+//                         onClick: () => handleOpenModal(id)
+//                     }))}
+//                     nameButton='Enviar'
+//                     colorButton='greenToBlue'
+//                 />
+//             </div>
+
+//             {/* Modal de confirmación */}
+//             <ConfirmationModal
+//                 open={openModal}
+//                 onClose={() => setOpenModal(false)}
+//                 onConfirm={handleSendProof}
+//             />
+//         </>
+//     );
+// };
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import { TableElement } from "../../elements/Table";
-import { ConfirmationModal } from "../../elements/ConfirmationModal";
-
-const missions = [
-    { acreedor: 'Marco Botton', descripcion: 'Eliminar al objetivo sin ser detectado y recuperar documentos clasificados.', estado: 'incompleto' },
-    { acreedor: 'Elena Vargas', descripcion: 'Infiltrarse en la fiesta privada y obtener información confidencial.', estado: 'completo' },
-    { acreedor: 'Samuel Ortega', descripcion: 'Interceptar la entrega de armas en el puerto.', estado: 'incompleto' },
-    { acreedor: 'Lucía Ferrer', descripcion: 'Instalar un software espía en el sistema del banco.', estado: 'completo' },
-    { acreedor: 'Carlos Mendoza', descripcion: 'Proteger a un testigo clave en el caso de corrupción.', estado: 'incompleto' },
-    { acreedor: 'Ana Beltrán', descripcion: 'Recuperar una memoria USB robada de alto valor.', estado: 'incompleto' },
-    { acreedor: 'Diego Ríos', descripcion: 'Localizar y asegurar a un científico desaparecido.', estado: 'completo' },
-    { acreedor: 'Valeria Gómez', descripcion: 'Interceptar una transmisión secreta en una emisora de radio.', estado: 'incompleto' },
-    { acreedor: 'Pablo Martínez', descripcion: 'Vigilar a un político sospechoso durante una conferencia.', estado: 'completo' },
-    { acreedor: 'Laura Torres', descripcion: 'Identificar a un infiltrado dentro de una agencia de inteligencia.', estado: 'incompleto' },
-    { acreedor: 'Fernando Morales', descripcion: 'Evitar un atentado terrorista en el metro.', estado: 'completo' },
-    { acreedor: 'Sofía Castillo', descripcion: 'Investigar una red de tráfico de personas en Europa.', estado: 'incompleto' },
-    { acreedor: 'Hugo Ramírez', descripcion: 'Interceptar un paquete con materiales radioactivos.', estado: 'completo' },
-    { acreedor: 'Natalia López', descripcion: 'Desenmascarar a un agente doble en la embajada.', estado: 'incompleto' },
-    { acreedor: 'Javier Cano', descripcion: 'Evacuar a un periodista retenido en zona de guerra.', estado: 'completo' },
-    { acreedor: 'Marta Pérez', descripcion: 'Colocar micrófonos en la oficina de un empresario corrupto.', estado: 'incompleto' },
-    { acreedor: 'Andrés Herrera', descripcion: 'Recuperar planos robados de un proyecto militar.', estado: 'completo' },
-    { acreedor: 'Patricia Sánchez', descripcion: 'Proteger un convoy diplomático en riesgo de ataque.', estado: 'incompleto' },
-    { acreedor: 'Roberto Díaz', descripcion: 'Interceptar un cargamento ilegal de diamantes.', estado: 'completo' },
-    { acreedor: 'Carmen Flores', descripcion: 'Rescatar a un científico clave secuestrado.', estado: 'incompleto' }
-];
-
 
 export const DebtsPayment = () => {
-    const [openModal, setOpenModal] = useState(false);
+    const [missions, setMissions] = useState([]);
+    const [selectedDebtId, setSelectedDebtId] = useState(null);
+    const [proofImage, setProofImage] = useState(null);
 
-    const toggleModal = () => setOpenModal((prev) => !prev);
+    // Obtenemos al usuario
+    const data = localStorage.getItem("user");
+    const userId = data ? JSON.parse(data).id : null;
+
+    // Obtener las deudas con `proof_image` en NULL
+    useEffect(() => {
+        if (!userId) return;
+
+        axios.get(`http://localhost:3000/debt/${userId}/no-proof`)
+            .then(({ data }) => setMissions(data))
+            .catch(error => console.error('Error al obtener deudas:', error));
+    }, [userId]);
+
+    // Manejar la carga del comprobante de pago
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setProofImage(reader.result); // Guardar la imagen como Base64
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    // Manejar el envío del comprobante de pago
+    const handleSendProof = async (debtId) => {
+        if (!proofImage) {
+            alert("Por favor, selecciona un comprobante antes de enviar.");
+            return;
+        }
+
+        try {
+            await axios.put(
+                `http://localhost:3000/debt/${debtId}/proof`,
+                { proof_image: proofImage }  // Enviar el comprobante en el body
+            );
+
+            alert('Comprobante enviado con éxito.');
+
+            // Recargar la lista de misiones
+            axios.get(`http://localhost:3000/debt/${userId}/no-proof`)
+                .then(({ data }) => setMissions(data));
+        } catch (error) {
+            console.error('Error al enviar el comprobante:', error);
+            alert('Error al enviar el comprobante. Intenta de nuevo.');
+        }
+    };
 
     return (
         <>
-            
             <div className='flex justify-center items-center mt-30'>
                 <h5 className='text-white font-bold text-2xl lg:text-5xl'>
                     Pagar Deudas
                 </h5>
             </div>
 
-            {/* Tabla con las misiones */}
+            {/* Tabla con las deudas */}
             <div className='w-full pt-15 px-2 sm:px-15'>
                 <TableElement
-                    header={['Nombre del Acreedor', 'Descripción', 'Estado', '', '']}
-                    showFileInput={true}
-                    data={missions}
+                    header={['Nombre del Acreedor', 'Descripción', 'Estado', '', '', '']}
+                    showFileInput={true} // Mostrar el campo para subir comprobantes
+                    onFileChange={handleFileChange} // Guardar la imagen seleccionada
+                    data={missions.map(({ creditorId, description, is_completed, id }) => ({
+                        creditorId,
+                        description,
+                        status: is_completed ? 'Completada' : 'Incompleta',
+                        onClick: () => handleSendProof(id) 
+                    }))}
                     nameButton='Enviar'
                     colorButton='greenToBlue'
-                    onClick={toggleModal}
                 />
             </div>
-
-            {/* Modal de confirmación */}
-            <ConfirmationModal
-                open={openModal}
-                onClose={toggleModal}
-                onConfirm={toggleModal}
-            />
         </>
     );
-}
+};

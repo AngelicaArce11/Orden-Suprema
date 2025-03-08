@@ -143,3 +143,64 @@ export const deleteDebt = async (req, res) => {
         return res.status(500).json({message: error.message});
     }
 };
+
+
+// GET - Obtener deudas con `proof_image` en NULL
+export const getDebtsWithoutProof = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const debtorId = parseInt(id, 10);
+
+        if (isNaN(debtorId) || debtorId <= 0) {
+            return res.status(400).json({ message: 'ID inválido' });
+        }
+
+        const debts = await Debt.findAll({
+            where: {
+                debtorId: debtorId,
+                proof_image: null
+            }
+        });
+
+        if (!debts || debts.length === 0) {
+            return res.status(404).json({ message: 'No se encontraron deudas pendientes con comprobante.' });
+        }
+
+        res.json(debts);
+    } catch (error) {
+        console.error('Error al obtener las deudas:', error);
+        res.status(500).json({ message: 'Error interno del servidor' });
+    }
+};
+
+// PUT - Actualizar deuda con comprobante de pago
+
+export const updateDebtWithProof = async (req, res) => {
+    try {
+        console.log('ID de la deuda recibido:', req.params.debtId);  // 🔎 Verifica que el ID llega correctamente
+        console.log('Imagen recibida:', req.body.proof_image);
+        const { debtId } = req.params;
+        const { proof_image } = req.body;  // Recibir la imagen como base64 o URL
+
+        
+        if (!proof_image) {
+            return res.status(400).json({ message: 'No se recibió ninguna imagen.' });
+        }
+
+        const debt = await Debt.findByPk(debtId);
+
+        if (!debt) {
+            return res.status(404).json({ message: 'Deuda no encontrada.' });
+        }
+
+        // Actualización del campo `proof_image`
+        await debt.update({ proof_image });
+
+        res.json({ message: 'Comprobante guardado exitosamente.', proof_image });
+
+    } catch (error) {
+        console.error('Error al actualizar la deuda:', error);
+        res.status(500).json({ message: 'Error interno del servidor' });
+    }
+};
+

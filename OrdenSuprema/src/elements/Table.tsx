@@ -9,6 +9,7 @@ interface TableElementProps {
     colorButton?: string;
     onClick?: (parameter: any) => void;
     showFileInput?: boolean;
+    onFileChange?: (event: any) => void;
 }
 
 export const TableElement = ({ header, data, nameButton, colorButton, onClick, showFileInput }: TableElementProps) => {
@@ -83,6 +84,7 @@ export const TableElement = ({ header, data, nameButton, colorButton, onClick, s
                                         <Button
                                             outline
                                             size='md'
+                                            
                                             gradientDuoTone={colorButton}
                                             onClick={() => onClick && onClick(rowIndex)}
                                             disabled={showFileInput && !files[rowIndex]}
