@@ -1,9 +1,8 @@
 import axios from "axios";
 import { useState } from "react";
 
-export const CompleteMission = () => {
+export const CompleteMission = ({ missionId = 3 }: { missionId: number }) => {
   const [image, setImage] = useState<File | null>(null);
-  const [imageId, setImageId] = useState<number | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -18,11 +17,11 @@ export const CompleteMission = () => {
     formData.append("image", image);
 
     try {
-      const response = await axios.put("http://localhost:3000/upload", formData, {
+      await axios.put(`http://localhost:3000/Mission/complete/${missionId}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      setImageId(response.data.imageId);
+      alert("Misión completada con éxito");
     } catch (error) {
       console.error("Error al subir la imagen:", error);
     }
@@ -32,7 +31,6 @@ export const CompleteMission = () => {
     <div className="mt-20">
       <input type="file" accept="image/*" onChange={handleFileChange} />
       <button onClick={handleUpload}>Subir Imagen</button>
-      {imageId && <p>Imagen subida con ID: {imageId}</p>}
     </div>
   );
 };

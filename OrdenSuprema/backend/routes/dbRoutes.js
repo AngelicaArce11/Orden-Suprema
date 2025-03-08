@@ -13,6 +13,7 @@ import {
   getAllMissions,
   getFilteredMissions,
   getUnreviewedMissions,
+  getMissionImage,
   createMission,
   acceptMission,
   completeMission,
@@ -53,11 +54,13 @@ router.get('/FilteredMission', getFilteredMissions);
 router.get('/Mission/Review', getUnreviewedMissions);
 router.get('/Mission/:id/PublishedBy');
 router.get('/Mission/AssignedTo/:id', getMissionsAssignedTo);
+router.get("/Mission/image/:id", getMissionImage);
+
 
 router.post('/Mission', createMission);
 router.put('/Mission:id');
 router.put('/Mission/accept/:id', acceptMission);
-router.put('/Mission/complete/:id', completeMission);
+router.put("/Mission/complete/:id", uploadMiddleware, completeMission);
 router.put('/Mission/confirm/:id', confirmMission);
 router.delete('/Mission/delete/:id', deleteMission);
 router.get('/Mission/:id');

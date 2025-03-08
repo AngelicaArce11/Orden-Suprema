@@ -10,7 +10,6 @@ interface MissionProps {
 export const MissionToConfirm = ({
   mission,
   onMissionUpdated,
-  imageId
 }: MissionProps) => {
   const [executioner, setExecutioner] = useState<User>();
   const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -24,10 +23,8 @@ export const MissionToConfirm = ({
   }, []);
 
   useEffect(() => {
-    if (!imageId) return;
-
-    setImageUrl(`http://localhost:3000/image/${imageId}`);
-  }, [imageId]);
+    setImageUrl(`http://localhost:3000/Mission/image/${mission.id}`);
+  }, [mission.id]);
 
   const handleUpdate = async (isConfirmed: boolean) => {
     try {
