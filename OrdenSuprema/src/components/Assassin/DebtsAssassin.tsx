@@ -15,11 +15,14 @@ export const DebtsAssassin = () => {
   const user = data ? JSON.parse(data) : null;
 
   useEffect(() => {
+    // Obtenemos al usuario
+    const data = localStorage.getItem("user");
+    const user = data ? JSON.parse(data) : null;
     if (!user || !user.id) return; // Validación para evitar errores si el usuario no existe
 
     const endpoint = section === 'deudasADeber'
-    ? `http://localhost:3000/api/debt/${user.id}/debtor`
-    : `http://localhost:3000/api/debt/${user.id}/creditor`;
+    ? `http://localhost:3000/debt/${user.id}/debtor`
+    : `http://localhost:3000/debt/${user.id}/creditor`;
 
     axios.get(endpoint)
       .then(({ data }) => {
