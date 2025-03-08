@@ -1,5 +1,9 @@
 import { Debt } from "../database/models/Debt.js";
+import multer from "multer";
 
+const upload = multer({ storage: multer.memoryStorage() });
+
+//Para obtener todas las deudas
 export const getAllDebts = async (req, res) => {
     try {
         const debts = await Debt.findAll();
@@ -32,7 +36,6 @@ export const getDebtByCreditorId = async (req, res) => {
     }
 };
 
-
 // Controlador para obtener todas las deudas del deudor
 export const getDebtByDebtorId = async (req, res) => {
     try {
@@ -56,6 +59,23 @@ export const getDebtByDebtorId = async (req, res) => {
         res.status(500).json({ message: 'Error interno del servidor' });
     }
 };
+
+//Para obtener la imagen
+export const getDebtImage = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const mission = await Mission.findByPk(id);
+  
+      if (!mission || !mission.image) {
+        return res.status(404).json({ message: "Imagen no encontrada" });
+      }
+  
+      res.setHeader("Content-Type", "image/png"); // Ajusta el formato si es necesario
+      res.send(mission.image);
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  };
 
 export const createDebt = async (req, res) => {
     try {
@@ -81,6 +101,25 @@ export const updateDebt = async (req, res) => {
         return res.status(500).json({message: error.message});
 }};
 
+export const confirmDebt = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const debt = await Debt.findByPk(id);
+    if (!debt) {
+        return res.status(404).json({ message: "Deuda no encontrada" });
+      }
+    debt.proofImage = `robohash.org/set_set1/bgset_bg1/${id}`;
+    debt.image = req.file.buffer;
+    debt.status = "under_review";
+    await debt.save();
+
+    res.json(mission);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 export const deleteDebt = async (req, res) => {
     try {
         const { id } = req.params
@@ -94,4 +133,3 @@ export const deleteDebt = async (req, res) => {
         return res.status(500).json({message: error.message});
     }
 };
-

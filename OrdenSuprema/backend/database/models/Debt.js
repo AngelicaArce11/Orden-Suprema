@@ -23,6 +23,10 @@ export const Debt = sequelize.define(
         proof_image: {
             type: DataTypes.STRING,
         },
+        image: {
+            type: DataTypes.BLOB("long"),
+            allowNull: true, // Might not be available until completion
+          },
     },
     {
         timestamps: false

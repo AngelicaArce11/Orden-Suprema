@@ -13,7 +13,7 @@ export const getAllMissions = async (req, res) => {
     }
 };
 
-// Para obtener solo las misiones que no han sido asignadas
+// Para obtener solo las misiones que no han sido asignadas 
 export const getFilteredMissions = async (req, res) => {
     try {
         const missions = await Mission.findAll({

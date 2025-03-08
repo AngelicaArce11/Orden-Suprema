@@ -1,4 +1,4 @@
-import { MissionToConfirm } from "./MissionToConfirm";
+import { MissionToConfirm } from "../../elements/MissionToConfirm";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Alert } from "flowbite-react";
