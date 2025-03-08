@@ -31,7 +31,6 @@ export const DebtsHighTable = () => {
 
     return (
       <>
-      <NavBar user="highTable"/>
 
       {/* Titulo */}
       <div className='flex justify-center items-center mt-30'>

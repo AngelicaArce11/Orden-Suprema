@@ -41,7 +41,6 @@ export const DebtsRegister = () => {
 
     return (
         <>
-            <NavBar user="assassin" />
 
             <div className="flex justify-center items-center mt-20">
                 <h5 className="text-white font-bold text-2xl lg:text-5xl">
