@@ -4,13 +4,6 @@ import { Dropdown, DropdownItem } from "flowbite-react";
 import { TableElement } from "../../elements/Table2";
 import axios from "axios";
 
-// const assassins = [
-//     {deudor: 'Jack el Destripador', acreedor: 'Zodiaco', descripcion: 'Deuda 1', estado: 'Incompleta', comprobante:''},
-//     {deudor: 'Zodiaco', acreedor: 'Jack el Destripador', descripcion: 'Deuda 2', estado: 'Incompleta', comprobante:''},
-//     {deudor: 'Darth Vader', acreedor: 'Jack el Destripador', descripcion: 'Deuda 3', estado: 'Incompleta', comprobante:''},
-//     {deduor: 'Chanci care picha', acreedor: 'Jack el Destripador', descripcion: 'Deuda 4', estado: 'Incompleta', comprobante:''},
-//     {deudor: 'Jack el Destripador', acreedor: 'Zodiaco', descripcion: 'Deuda 5', estado: 'Incompleta', comprobante:'dddd'},
-// ]
 
 export const DebtsConfirm = () => {
   const [debts, setDebts] = useState<Debt[]>([]);
@@ -46,47 +39,35 @@ export const DebtsConfirm = () => {
     });
   }, [debts]);
 
-  // Obtener las imagenes de prueba
-  useEffect(() => {
-    debts.forEach(({ creditorId, debtorId }) => {
-      namePerson(creditorId);
-      namePerson(debtorId);
-    });
-  }, [debts]);
-
+// Informació a mostrar en la tabla
   const debtsData = debts
     .filter((m) => !m.is_completed)
-    .map(({ debtorId, creditorId, description }) => ({
+    .map(({id,  debtorId, creditorId, description }) => ({
+      id,
       deudor: names[debtorId],
       acreedor: names[creditorId],
       descripcion: description,
       estado: "Incompleta",
+      
     }));
 
-  useEffect(() => {
-      axios.get(`http://localhost:3000/debts`)
-          .then(({ data }) => setDebts(data))
-          .catch(console.error);
-  }, []);
-
+  //Aceptar deuda 
   const handleAccept = async (id: number) => {
-      await axios.put(`http://localhost:3000/debts/${id}`);
-      setDebts(debts.map(debt =>
-          debt.id === id ? { ...debt, estado: "Completa" } : debt
-      ));
-  };
+    await axios.put(`http://localhost:3000/debt/${id}`, { is_completed: true });
+    setDebts((prevDebts) =>
+      prevDebts.map((debt) =>
+        debt.id === id ? { ...debt, is_completed: true } : debt
+      )
+    );
+    };
 
-  const buttons = [
+  const buttons  = (id: number) =>[
     {
       name: "Aceptar",
       color: "greenToBlue",
-      onClick: () => console.log("Aceptar"),
+      onClick: () => handleAccept(id),
     },
-    {
-      name: "Rechazar",
-      color: "pinkToOrange",
-      onClick: () => console.log("Rechazar"),
-    },
+
   ];
 
   return (
@@ -100,10 +81,10 @@ export const DebtsConfirm = () => {
       {/* Tabla con los datos filtrados */}
       <div className="w-full pt-15 pr-4 pl-4 px-2 sm:px-30">
         <TableElement
-          header={["Deudor", "Acreedor", "Descripción", "Estado"]}
+          header={["ID", "Deudor", "Acreedor", "Descripción", "Estado"]}
           showModalColumn={true}
           data={debtsData}
-          buttons={buttons}
+          buttons={buttons} 
         />
       </div>
     </>
