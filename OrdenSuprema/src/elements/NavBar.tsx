@@ -193,6 +193,13 @@ export const NavBar = ({user} : NavBarProps ) => {
                                         </Link>
                                     </Sidebar.Collapse>
                                     <Sidebar.Collapse label={user === 'assassin' ? 'Deudas': 'Asesinos'}>
+
+                                        {user === 'assassin' ? (
+                                            <Link to={"/debtsAssassin"}>
+                                                <Sidebar.Item href="#"> Ver deudas </Sidebar.Item>
+                                            </Link>
+                                        ): null }
+                                        
                                         <Link to={user === 'assassin' ? "/debtsRegister" : "/formAssassin"}>
                                             <Sidebar.Item href="#">{user === 'assassin' ? 'Registrar deuda' : 'Registrar asesino'}</Sidebar.Item>
                                         </Link>
