@@ -6,7 +6,9 @@ import {
   getAllDebts,
   createDebt,
   updateDebt,
-  deleteDebt
+  deleteDebt,
+  getDebtByCreditorId,
+  getDebtByDebtorId
 } from "../controllers/debtController.js";
 
 import {
@@ -32,6 +34,7 @@ import {
   updateUserCoins,
   updateUserLocation
 } from "../controllers/userController.js";
+import { get } from "http";
 
 const router = Router();
 
@@ -43,7 +46,8 @@ router.get('/debt', getAllDebts);
 router.post('/debt', createDebt);
 router.put('/debt/:id', updateDebt);
 router.delete('/debt/:id', deleteDebt);
-router.get('/debt/:id');
+router.get('/debt/:id/creditor', getDebtByCreditorId);
+router.get('/debt/:id/debtor', getDebtByDebtorId);
 
  //Missions
 router.get('/Mission', getAllMissions);
