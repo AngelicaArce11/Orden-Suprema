@@ -1,22 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavBar } from "../../elements/NavBar";
 import { TableElement } from "../../elements/Table";
+import axios from "axios";
 
-
-interface Assassin {
-  nombreObj: string;
-  descripcion: string;
-  estado: string;
-  pago: number;
-}
-
-const assassins: Assassin[] = [
-  { nombreObj: "John Doe", descripcion: "jdneknejden jdhkjasbdkasbd asdbjasbdk asdkebbefkhba dbjkhef mabsdkabkub jadbkedbkabed d", estado: "Completa", pago: 23 },
-  { nombreObj: "Jane Doe", descripcion: "behbfeek fkef", estado: "En progreso", pago: 19 },
-  { nombreObj: "John Smith", descripcion: "dhbjhejhefb", estado: "Pendiente", pago: 30 },
-
-];
-
+// Componente para la barra de búsqueda
 function SearchAsesino({ search, setSearch }: { search: string; setSearch: React.Dispatch<React.SetStateAction<string>> }) {
   return (
     <input
@@ -29,17 +16,29 @@ function SearchAsesino({ search, setSearch }: { search: string; setSearch: React
   );
 }
 
+// Componente para la tabla del historial de misiones
 export const History = () => {
   const [search, setSearch] = useState("");
-  const [filteredAssassin, setFilteredAssassin] = useState(assassins);
+  const [missions, setMissions] = useState<Mission[]>([]);
+  
+  // LLamado al backend para obtener las misiones
+  useEffect(() => {
+    axios.get("http://localhost:3000/Mission")
+      .then(({ data }) => setMissions(data))
+      .catch(console.error);
+  }, []);
 
-  React.useEffect(() => {
-    setFilteredAssassin(
-      assassins.filter((asesino) =>
-        asesino.nombreObj.toLowerCase().includes(search.toLowerCase())
-      )
-    );
-  }, [search]);
+  // Filtro para aplicar la búsqueda y para obtener los campos necesarios para la visualización
+  const filteredMissions = missions
+    .filter(m => m.targetName.toLowerCase().includes(search.toLowerCase()))
+    .map(({ targetName, description, status, paymentValue }) => 
+      [targetName, description, 
+      { unassigned: "Sin asignar",
+        in_progress: "En progreso",
+        under_review: "En revisión",
+        completed: "Completado",
+        failed: "Fallido"}[status], `$${paymentValue.toLocaleString()}`]);
+
 
   return (
     <>
@@ -61,7 +60,7 @@ export const History = () => {
 
       {/* Tabla y barra de busqueda con el Historial de los asesinos */}
       <div className='w-full pt-15 pr-4 pl-4 px-2 sm:px-15  '>        
-        <TableElement header={['Nombre del objetivo', 'Descripción', 'Estado', 'Pago']} data={filteredAssassin}  ></TableElement>
+        <TableElement header={['Nombre del objetivo', 'Descripción', 'Estado', 'Pago']} data={filteredMissions}  ></TableElement>
       </div>
       
     </>
