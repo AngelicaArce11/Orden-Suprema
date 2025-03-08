@@ -139,14 +139,10 @@ export const MissionPostPage = () => {
             ) : null } 
 
             {/* Modal de pago por el acceso a la funcionalidad - Caso asesino  */}
-<<<<<<< Updated upstream
+
             <Modal size="md" className='bg-slate-500/50' show={openPayModal}>
                 <Modal.Body className='border-2 border-cyan-500 rounded-xl'>
-=======
-            <Modal size="md" show={openPayModal} dismissible className="bg-transparent" >
-                
-                <Modal.Body className="bg-slate-700 border border-gray-100 rounded-lg p-5 m-5 ">
->>>>>>> Stashed changes
+
                     <div className='text-left'>
                         <h3 className="mb-5 text-lg font-normal text-gray-400">
                             Para acceder a esta opción debes pagar {payment} monedas.
