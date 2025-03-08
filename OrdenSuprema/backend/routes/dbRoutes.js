@@ -46,8 +46,8 @@ router.get('/debt', getAllDebts);
 router.post('/debt', createDebt);
 router.put('/debt/:id', updateDebt);
 router.delete('/debt/:id', deleteDebt);
-router.get('/debt/:id', getDebtByCreditorId);
-// router.get('/debt/:id', getDebtByDebtorId);
+router.get('/debt/:id/creditor', getDebtByCreditorId);
+router.get('/debt/:id/debtor', getDebtByDebtorId);
 
  //Missions
 router.get('/Mission', getAllMissions);
