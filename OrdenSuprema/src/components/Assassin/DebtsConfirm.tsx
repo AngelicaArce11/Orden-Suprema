@@ -63,18 +63,18 @@ export const DebtsConfirm = () => {
       estado: "Incompleta",
     }));
 
-  // useEffect(() => {
-  //     axios.get(`http://localhost:3000/debts`)
-  //         .then(({ data }) => setDebts(data))
-  //         .catch(console.error);
-  // }, []);
+  useEffect(() => {
+      axios.get(`http://localhost:3000/debts`)
+          .then(({ data }) => setDebts(data))
+          .catch(console.error);
+  }, []);
 
-  // const handleAccept = async (id: number) => {
-  //     await axios.put(`http://localhost:3000/debts/${id}`);
-  //     setDebts(debts.map(debt =>
-  //         debt.id === id ? { ...debt, estado: "Completa" } : debt
-  //     ));
-  // };
+  const handleAccept = async (id: number) => {
+      await axios.put(`http://localhost:3000/debts/${id}`);
+      setDebts(debts.map(debt =>
+          debt.id === id ? { ...debt, estado: "Completa" } : debt
+      ));
+  };
 
   const buttons = [
     {
