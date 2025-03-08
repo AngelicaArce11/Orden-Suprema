@@ -1,63 +1,133 @@
-import { useState } from 'react';
-import { NavBar } from "../../elements/NavBar";
+import { useState, useEffect } from 'react';
 import { TableElement } from "../../elements/Table";
 import { ConfirmationModal } from "../../elements/ConfirmationModal";
-
-const missions = [
-    { acreedor: 'Marco Botton', descripcion: 'Eliminar al objetivo sin ser detectado y recuperar documentos clasificados.', estado: 'incompleto' },
-    { acreedor: 'Elena Vargas', descripcion: 'Infiltrarse en la fiesta privada y obtener información confidencial.', estado: 'completo' },
-    { acreedor: 'Samuel Ortega', descripcion: 'Interceptar la entrega de armas en el puerto.', estado: 'incompleto' },
-    { acreedor: 'Lucía Ferrer', descripcion: 'Instalar un software espía en el sistema del banco.', estado: 'completo' },
-    { acreedor: 'Carlos Mendoza', descripcion: 'Proteger a un testigo clave en el caso de corrupción.', estado: 'incompleto' },
-    { acreedor: 'Ana Beltrán', descripcion: 'Recuperar una memoria USB robada de alto valor.', estado: 'incompleto' },
-    { acreedor: 'Diego Ríos', descripcion: 'Localizar y asegurar a un científico desaparecido.', estado: 'completo' },
-    { acreedor: 'Valeria Gómez', descripcion: 'Interceptar una transmisión secreta en una emisora de radio.', estado: 'incompleto' },
-    { acreedor: 'Pablo Martínez', descripcion: 'Vigilar a un político sospechoso durante una conferencia.', estado: 'completo' },
-    { acreedor: 'Laura Torres', descripcion: 'Identificar a un infiltrado dentro de una agencia de inteligencia.', estado: 'incompleto' },
-    { acreedor: 'Fernando Morales', descripcion: 'Evitar un atentado terrorista en el metro.', estado: 'completo' },
-    { acreedor: 'Sofía Castillo', descripcion: 'Investigar una red de tráfico de personas en Europa.', estado: 'incompleto' },
-    { acreedor: 'Hugo Ramírez', descripcion: 'Interceptar un paquete con materiales radioactivos.', estado: 'completo' },
-    { acreedor: 'Natalia López', descripcion: 'Desenmascarar a un agente doble en la embajada.', estado: 'incompleto' },
-    { acreedor: 'Javier Cano', descripcion: 'Evacuar a un periodista retenido en zona de guerra.', estado: 'completo' },
-    { acreedor: 'Marta Pérez', descripcion: 'Colocar micrófonos en la oficina de un empresario corrupto.', estado: 'incompleto' },
-    { acreedor: 'Andrés Herrera', descripcion: 'Recuperar planos robados de un proyecto militar.', estado: 'completo' },
-    { acreedor: 'Patricia Sánchez', descripcion: 'Proteger un convoy diplomático en riesgo de ataque.', estado: 'incompleto' },
-    { acreedor: 'Roberto Díaz', descripcion: 'Interceptar un cargamento ilegal de diamantes.', estado: 'completo' },
-    { acreedor: 'Carmen Flores', descripcion: 'Rescatar a un científico clave secuestrado.', estado: 'incompleto' }
-];
-
+import axios from "axios";
 
 export const DebtsPayment = () => {
+    // Estado para manejar el estado del modal de confimación
     const [openModal, setOpenModal] = useState(false);
+    // Estado para manejar las deudas en las que el asesino es deudor
+    const [debts, setDebts] = useState([]);
+    // Estado para conocer el ID del usuario 
+    const [IDUser, setIdUser] = useState(-1);
+    // Estado para manejar los nombres de los acrededores
+    const [names, setNames] = useState<string[]>([]);
+    // Estado para manejar los archivos cargados
+    const [files, setFiles] = useState<{ [key: number]: File | null }>({});
+    // Estado para manejar la aceptacion de una mision, tiene el indice de la fila de la mision a aceptar
+    const [accept, setAccept] = useState<number>();
+
+    // Obtenemos los datos de la BD 
+    useEffect(() => {
+
+        const data = localStorage.getItem("user");
+        const user = data ? JSON.parse(data) : null;
+        if (!user || !user.id) return; // Validación para evitar errores si el usuario no existe
+
+        axios
+            .get(`http://localhost:3000/debt/${user.id}/debtor`)
+            .then((response) => {
+                setDebts(
+                    response.data.map((debt: any) => ({
+                        id: debt.id,
+                        creditorId : debt.creditorId,
+                        description: debt.description,
+                        is_completed: debt.is_completed
+                    })).filter((debt: any) => debt.is_completed === false)
+                )
+                setIdUser(user.id);
+            }
+            )
+            .catch((error) => console.error("Error fetching debts:", error));
+    }, []);
+
+    // Metodo que permite conocer el nombre del asesino
+    const namePerson = async (id: number) => {
+        if (!names[id]) {  
+            const { data } = await axios.get(`http://localhost:3000/UserById/${id}`);
+            setNames(prev => ({ ...prev, [id]: data.name }));    
+        }
+    };
+
+    // Obtener los nombres de los acreedores
+    useEffect(() => {
+        debts.forEach(({ creditorId }) => {
+            namePerson(creditorId);
+        });
+    }, [debts]);
+
+     // Este metodo sirve para obtener la fila de la mision que se esta aceptando
+    const clickAccept = (row: number) => {
+        setAccept(row);
+        setOpenModal(true);
+    };
+
+    // Función para manejar la carga de archivos
+    const handleFileChange = (rowIndex: number, file: File | null) => {
+        setFiles((prevFiles) => ({
+            ...prevFiles,
+            [rowIndex]: file, // Asociamos el archivo con la fila correspondiente
+        }));
+        console.log(`Archivo subido en la fila ${rowIndex}:`, file);
+    };
 
     const toggleModal = () => setOpenModal((prev) => !prev);
 
+    const handleUpload = async (rowIndex: number) => {
+
+        const image = files[rowIndex]
+        if (!image) return;
+
+        const formData = new FormData();
+        formData.append("image", image);
+
+        try {
+            await axios.put(`http://localhost:3000/debt/pay/${debts[rowIndex].id}`,  formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+            });
+
+            alert("Deuda pagada con éxito");
+            setOpenModal(false);
+        } catch (error) {
+            console.error("Error al subir la imagen:", error);
+            setOpenModal(false);
+        }
+    };
+
+    // Obtener los campos necesarios para la visualización
+    let data = debts.map(({ creditorId, description, is_completed }) => [
+        names[creditorId],
+        description,
+        is_completed ? "Completada" : "Sin completar"
+    ]);
+
     return (
         <>
-            
             <div className='flex justify-center items-center mt-30'>
                 <h5 className='text-white font-bold text-2xl lg:text-5xl'>
                     Pagar Deudas
                 </h5>
             </div>
 
-            {/* Tabla con las misiones */}
+            {/* Tabla con las debts */}
             <div className='w-full pt-15 px-2 sm:px-15'>
                 <TableElement
-                    header={['Nombre del Acreedor', 'Descripción', 'Estado', '', '']}
-                    showFileInput={true}
-                    data={missions}
+                    header={['Nombre del Acreedor', 'Descripción', 'Estado', 'Comprobante', '']}
+                    data={data}
                     nameButton='Enviar'
                     colorButton='greenToBlue'
-                    onClick={toggleModal}
+                    onClick={clickAccept}
+                    showFileInput={true}
+                    onFileChange={handleFileChange}
                 />
             </div>
+
 
             {/* Modal de confirmación */}
             <ConfirmationModal
                 open={openModal}
                 onClose={toggleModal}
-                onConfirm={toggleModal}
+                onConfirm={() => accept !== undefined ? handleUpload(accept) : setOpenModal(false)}
             />
         </>
     );

@@ -63,19 +63,19 @@ export const getDebtByDebtorId = async (req, res) => {
 //Para obtener la imagen
 export const getDebtImage = async (req, res) => {
     try {
-      const { id } = req.params;
-      const mission = await Mission.findByPk(id);
-  
-      if (!mission || !mission.image) {
+        const { id } = req.params;
+        const debt = await Debt.findByPk(id);
+
+        if (!debt || !debt.image) {
         return res.status(404).json({ message: "Imagen no encontrada" });
-      }
-  
-      res.setHeader("Content-Type", "image/png"); // Ajusta el formato si es necesario
-      res.send(mission.image);
+        }
+
+        res.setHeader("Content-Type", "image/png"); // Ajusta el formato si es necesario
+        res.send(debt.image);
     } catch (error) {
-      return res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
-  };
+};
 
 export const createDebt = async (req, res) => {
     try {
@@ -94,14 +94,14 @@ export const createDebt = async (req, res) => {
 
 export const updateDebt = async (req, res) => {
     try {
-    const { id } = req.params
+    const { id } = req.params;
     //Pendiente por implementar
     res.sendStatus(501);
     } catch (error) {
         return res.status(500).json({message: error.message});
 }};
 
-export const confirmDebt = async (req, res) => {
+export const payDebt = async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -109,12 +109,12 @@ export const confirmDebt = async (req, res) => {
     if (!debt) {
         return res.status(404).json({ message: "Deuda no encontrada" });
       }
-    debt.proofImage = `robohash.org/set_set1/bgset_bg1/${id}`;
+    // debt.proofImage = `robohash.org/set_set1/bgset_bg1/${id}`;
     debt.image = req.file.buffer;
-    debt.status = "under_review";
+    // debt.status = "under_review";
     await debt.save();
 
-    res.json(mission);
+    res.json(debt);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
