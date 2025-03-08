@@ -90,9 +90,9 @@ export const TableElement = ({ header, data, showModalColumn = false, buttons }:
             </div>
 
             {/* Modal para ver el comprobante */}
-            <Modal show={isOpen} onClose={() => setIsOpen(false)}>
+            <Modal show={isOpen} onClose={() => setIsOpen(false)} className='bg-slate-500/50' >
                 <Modal.Header>Comprobante</Modal.Header>
-                <Modal.Body className="flex justify-center">
+                <Modal.Body className='border-2 border-cyan-500 rounded-xl'>
                     {modalImage ? (
                         <img src={modalImage} alt="Comprobante" className="max-w-full h-auto" />
                      ) : (

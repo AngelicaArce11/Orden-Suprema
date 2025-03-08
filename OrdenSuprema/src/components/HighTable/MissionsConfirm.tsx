@@ -1,4 +1,4 @@
-import { MissionToConfirm } from "./MissionToConfirm";
+import { MissionToConfirm } from "../../elements/MissionToConfirm";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Alert } from "flowbite-react";
@@ -36,9 +36,8 @@ export const MissionsConfirm = () => {
         ) : (
           missions.map((mission: Mission) => (
             <MissionToConfirm
-              mission={mission}
-              onMissionUpdated={fetchMissions}
-              imageId={1}
+              mission={ mission }
+              onMissionUpdated={ fetchMissions }
             />
           ))
         )}
