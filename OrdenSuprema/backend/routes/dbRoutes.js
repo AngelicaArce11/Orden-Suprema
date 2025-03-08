@@ -8,7 +8,9 @@ import {
   updateDebt,
   deleteDebt,
   getDebtByCreditorId,
-  getDebtByDebtorId
+  getDebtByDebtorId, 
+  getDebtsWithoutProof,
+  updateDebtWithProof
 } from "../controllers/debtController.js";
 
 import {
@@ -22,7 +24,8 @@ import {
   confirmMission,
   updateMission,
   deleteMission,
-  getMissionsAssignedTo
+  getMissionsAssignedTo,
+  getMissionsAssignedToByStatus
 } from "../controllers/missionController.js";
 
 import {
@@ -51,6 +54,9 @@ router.put('/debt/:id', updateDebt);
 router.delete('/debt/:id', deleteDebt);
 router.get('/debt/:id/creditor', getDebtByCreditorId);
 router.get('/debt/:id/debtor', getDebtByDebtorId);
+router.get('/debt/:id/no-proof', getDebtsWithoutProof);  
+router.put('/debt/:debtId/proof', updateDebtWithProof);  
+
 
  //Missions
 router.get('/Mission', getAllMissions);
@@ -59,6 +65,7 @@ router.get('/Mission/Review', getUnreviewedMissions);
 router.get('/Mission/:id/PublishedBy');
 router.get('/Mission/AssignedTo/:id', getMissionsAssignedTo);
 router.get("/Mission/image/:id", getMissionImage);
+router.get("/Mission/AssignedTo/:id/status", getMissionsAssignedToByStatus);
 
 
 router.post('/Mission', createMission);
@@ -68,6 +75,7 @@ router.put("/Mission/complete/:id", uploadMiddleware, completeMission);
 router.put('/Mission/confirm/:id', confirmMission);
 router.delete('/Mission/delete/:id', deleteMission);
 router.get('/Mission/:id');
+router.put('/Mission/submitProof/:userId', updateDebtWithProof);
 
  //Transactions
 router.get('/Transaction');

@@ -42,6 +42,20 @@ export const getMissionsAssignedTo = async (req, res) => {
     }
 };
 
+export const getMissionsAssignedToByStatus = async (req, res) => {
+    try {
+        const { id } = req.params
+        const missions = await Mission.findAll({
+            where: {
+                assignedToId: id,
+                status: 'in_progress'
+            }
+        });
+        res.json(missions);
+    } catch (error) {
+        return res.status(500).json({message: error.message});
+    }
+};
 // Para obtener solo las misiones que no han sido revisadas por la orden
 export const getUnreviewedMissions = async (req, res) => {
     try {
@@ -99,6 +113,8 @@ export const updateMission = async (req, res) => {
     } catch (error) {
         return res.status(500).json({message: error.message});
 }};
+
+
 
 export const acceptMission = async (req, res) => {
     try {
@@ -172,5 +188,42 @@ export const deleteMission = async (req, res) => {
         res.sendStatus(204);
     } catch (error) {
         return res.status(500).json({message: error.message});
+    }
+};
+
+export const submitProof = async (req, res) => {
+    try {
+        const { userId } = req.params;         // Obtener el ID del usuario desde la URL
+        const { missionId, status, proofImage } = req.body; // Obtener el ID de la misión y otros datos del body
+
+        if (!missionId) {
+            return res.status(400).json({ message: "El ID de la misión es requerido." });
+        }
+
+        const mission = await Mission.findOne({
+            where: {
+                id: missionId,
+                assignedToId: userId,    // Verificar que esa misión está asignada al usuario
+                status: 'in_progress'    // Solo se permite actualizar si está en progreso
+            }
+        });
+
+        if (!mission) {
+            return res.status(404).json({ message: "Misión no encontrada o no asignada a este usuario." });
+        }
+
+        await mission.update({
+            status,
+            proofImage: proofImage || mission.proofImage
+        });
+
+        res.json({
+            message: 'Misión actualizada correctamente.',
+            mission
+        });
+
+    } catch (error) {
+        console.error('Error al actualizar la misión:', error);
+        res.status(500).json({ message: 'Error interno del servidor.' });
     }
 };
