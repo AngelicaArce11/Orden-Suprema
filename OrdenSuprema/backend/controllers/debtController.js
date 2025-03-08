@@ -32,9 +32,6 @@ export const getDebtByCreditorId = async (req, res) => {
     }
 };
 
-app.get('/test', (req, res) => {
-    res.send('El servidor está funcionando');
-});
 
 // Controlador para obtener todas las deudas del deudor
 export const getDebtByDebtorId = async (req, res) => {
