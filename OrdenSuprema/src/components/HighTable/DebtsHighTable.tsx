@@ -7,6 +7,7 @@ export const DebtsHighTable = () => {
     const [debts, setDebts] = useState<Debt[]>([])
     const [filterCompleted, setFilterCompleted] = useState(false);
     const [filterNCompleted, setFilterNCompleted] = useState(false);
+    const [names, setNames] = useState<string[]>([]);
 
     // LLamado al backend para obtener las deudas
     useEffect(() => {
@@ -15,6 +16,7 @@ export const DebtsHighTable = () => {
         .catch(console.error);
     }, []);
 
+    
     // Filtro para aplicar los checkboxes
     const filteredDebts = debts.filter(debt => {
       if (filterCompleted && !debt.is_completed) 
@@ -24,14 +26,33 @@ export const DebtsHighTable = () => {
       return true;
     });
 
+    const namePerson = async (id: number) => {
+      if (!names[id]) {  
+        const { data } = await axios.get(`http://localhost:3000/UserById/${id}`);
+        setNames(prev => ({ ...prev, [id]: data.name }));    
+      }
+    };
+
+    // Obtener los nombres de los usuarios
+    useEffect(() => {
+        debts.forEach(({ creditorId, debtorId }) => {
+            namePerson(creditorId);
+            namePerson(debtorId);
+        });
+    }, [debts]);
+
+
     // Obtener los campos necesarios para la visualización
-    const data = filteredDebts
-      .map(({ creditorId, debtorId, description, is_completed }) => 
-      [creditorId, debtorId, description, is_completed ? "Completada" : "Sin completar"])
+    let data = filteredDebts
+        .map(({ creditorId, debtorId, description, is_completed }) => [
+          names[creditorId],
+          names[debtorId],
+          description,
+          is_completed ? "Completada" : "Sin completar"
+      ]);
 
     return (
       <>
-      <NavBar user="highTable"/>
 
       {/* Titulo */}
       <div className='flex justify-center items-center mt-30'>
@@ -71,5 +92,5 @@ export const DebtsHighTable = () => {
         </div>
         </>
     );
-    };
+};
 

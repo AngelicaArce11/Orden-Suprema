@@ -23,7 +23,6 @@ export const Login = ({setUserRole,}: {setUserRole: (role: string | null) => voi
         (pos) => {
             setLatitude(pos.coords.latitude);
             setLongitude(pos.coords.longitude);
-            console.log(pos.coords.latitude);
         },
         (err) => {console.error(err)},
         {maximumAge: 10000}

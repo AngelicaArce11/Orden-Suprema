@@ -57,7 +57,7 @@ export const getUnreviewedMissions = async (req, res) => {
 export const createMission = async (req, res) => {
     try {
         const {targetName, description, paymentValue, publishedById} = req.body
-        console.log(req.body);
+
         const newMission = await Mission.create({
             targetName: targetName,
             description: description,

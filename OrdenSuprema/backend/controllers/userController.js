@@ -66,7 +66,6 @@ const sendEmail = async (email, name, password) => {
         text: `¡Hola ${name}! \nEl registro de tu cuenta ha sido realizado. \nTu usuario es tu correo electrónico: ${email}. \nTu contraseña es: ${password}`,
     };
     await transporter.sendMail(emailData);
-    console.log(`Correo enviado a: ${email}`);
 };
 
 
@@ -144,7 +143,7 @@ export const createOrder = async (req, res) => {
 export const updateUserCoins = async (req, res) => {
     try { //Para actualizar el saldo
     const { id } = req.params;
-    const {set, coins} = req.body
+    const { coins } = req.body
 
     const user = await User.findByPk(id);
     user.totalCoins += coins;

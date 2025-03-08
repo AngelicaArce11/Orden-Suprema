@@ -48,8 +48,7 @@ export const MissionPage = () => {
                         targetName: mission.targetName,
                         description: mission.description,
                         paymentValue: mission.paymentValue
-                    })
-                    )
+                    }))
                 )
                 // Obtenemos el id del usuario
                 setIdAssassin(user.id);
@@ -129,8 +128,8 @@ export const MissionPage = () => {
             ) : null } 
 
             {/* Modal de confirmacion o cancelacion */}
-            <Modal size="md" show={openModal} onClose={() => setOpenModal(false)} className='bg-opacity-50'>
-                <Modal.Body>
+            <Modal size="md" className='bg-slate-500/50' show={openModal} onClose={() => setOpenModal(false)}>
+                <Modal.Body className='border-2 border-cyan-500 rounded-xl'>
                     <div className='text-center'>
                         <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-200" />
                         {}
