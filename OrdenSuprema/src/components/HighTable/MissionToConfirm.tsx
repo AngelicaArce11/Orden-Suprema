@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 interface MissionProps {
   mission: Mission;
   onMissionUpdated: () => void;
+  imageId: number;
 }
 
 export const MissionToConfirm = ({
@@ -11,15 +12,19 @@ export const MissionToConfirm = ({
   onMissionUpdated,
 }: MissionProps) => {
   const [executioner, setExecutioner] = useState<User>();
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   //Fijar Executioner
   useEffect(() => {
-    console.log(1);
     axios
       .get(`http://localhost:3000/UserById/${mission.assignedToId}`)
       .then((response) => setExecutioner(response.data))
       .catch((error) => console.error("Error fetching executioner:", error));
   }, []);
+
+  useEffect(() => {
+    setImageUrl(`http://localhost:3000/Mission/image/${mission.id}`);
+  }, [mission.id]);
 
   const handleUpdate = async (isConfirmed: boolean) => {
     try {
@@ -54,7 +59,7 @@ export const MissionToConfirm = ({
             <div className="h-64 overflow-hidden rounded-3xl bg-transparent shadow-inner md:h-auto">
               <a href= {mission.proofImage}>
                 <img
-                  src={mission.proofImage}
+                  src={imageUrl}
                   loading="lazy"
                   alt="Foto de Prueba"
                   className="h-full w-full object-cover object-center"

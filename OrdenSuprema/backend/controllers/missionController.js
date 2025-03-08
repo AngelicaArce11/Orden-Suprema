@@ -1,4 +1,7 @@
 import { Mission } from "../database/models/Mission.js";
+import multer from "multer";
+
+const upload = multer({ storage: multer.memoryStorage() });
 
 // Para obtener todas las misiones
 export const getAllMissions = async (req, res) => {
@@ -53,6 +56,23 @@ export const getUnreviewedMissions = async (req, res) => {
     }
 };
 
+//Para obtener la imagen
+export const getMissionImage = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const mission = await Mission.findByPk(id);
+  
+      if (!mission || !mission.image) {
+        return res.status(404).json({ message: "Imagen no encontrada" });
+      }
+  
+      res.setHeader("Content-Type", "image/png"); // Ajusta el formato si es necesario
+      res.send(mission.image);
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  };
+
 // Para crear una mision
 export const createMission = async (req, res) => {
     try {
@@ -96,19 +116,27 @@ export const acceptMission = async (req, res) => {
 }};
 
 export const completeMission = async (req, res) => {
-    try {
+  try {
     const { id } = req.params;
     const { proofImage } = req.body;
 
     const mission = await Mission.findByPk(id);
-    mission.proofImage = proofImage;
-    mission.status = 'under_review';
+    if (!mission) {
+        return res.status(404).json({ message: "Misión no encontrada" });
+      }
+    mission.proofImage = `robohash.org/set_set1/bgset_bg1/${id}`;
+    mission.image = req.file.buffer;
+    mission.status = "under_review";
     await mission.save();
 
     res.json(mission);
-    } catch (error) {
-        return res.status(500).json({message: error.message});
-}};
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+// Middleware para manejar la imagen en `req.file`
+export const uploadMiddleware = upload.single("image");
 
 export const confirmMission = async (req, res) => {
     try {

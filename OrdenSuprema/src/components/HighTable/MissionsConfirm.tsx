@@ -38,6 +38,7 @@ export const MissionsConfirm = () => {
             <MissionToConfirm
               mission={mission}
               onMissionUpdated={fetchMissions}
+              imageId={1}
             />
           ))
         )}

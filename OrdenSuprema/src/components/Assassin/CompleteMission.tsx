@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { NavBar } from "../../elements/NavBar";
 import { TableElement } from "../../elements/Table";
 import { ConfirmationModal } from "../../elements/ConfirmationModal";
+import { UploadImage } from './UploadImage';
 
 const missions = [
     {objetivo: 'Marco Botton', hitman:'Capry', descripcion: 'Eliminar al objetivo sin ser detectado y recuperar documentos clasificados.', pago: 20},
@@ -42,6 +42,7 @@ export const CompleteMission = () => {
                 onClose={toggleModal}
                 onConfirm={toggleModal}
             />
+            <UploadImage missionId={3}/>
         </>
     )
 
