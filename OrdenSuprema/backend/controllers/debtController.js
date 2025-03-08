@@ -13,9 +13,10 @@ export const createDebt = async (req, res) => {
     try {
         const {description, creditorId, debtorId} = req.body
         const newDebt = await Debt.create({
-            description,
-            debtorId,
-            creditorId
+            description: description,
+            is_completed: false,
+            debtorId: debtorId,
+            creditorId: creditorId
         });
         res.json(newDebt);
     } catch (error) {
