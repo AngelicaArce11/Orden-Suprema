@@ -19,6 +19,7 @@ a {
   font-weight: 500;
   color: #ffffff;
   text-decoration: inherit;
+  cursor: pointer;
 }
 
 button {

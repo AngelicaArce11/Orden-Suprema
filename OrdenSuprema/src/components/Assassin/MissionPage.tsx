@@ -48,8 +48,7 @@ export const MissionPage = () => {
                         targetName: mission.targetName,
                         description: mission.description,
                         paymentValue: mission.paymentValue
-                    })
-                    )
+                    }))
                 )
                 // Obtenemos el id del usuario
                 setIdAssassin(user.id);
