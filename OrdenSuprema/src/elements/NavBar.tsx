@@ -1,4 +1,3 @@
-import exampleIcon from '../assets/icons/user.png';
 import { Dropdown, Drawer, Sidebar  } from "flowbite-react";
 import { HiBars4,HiArrowRightOnRectangle} from "react-icons/hi2";
 import { useState, useEffect } from 'react';
@@ -114,6 +113,13 @@ export const NavBar = ({user} : NavBarProps ) => {
                         </button>}
                     >
                         <div className="bg-gray-800 text-white rounded-lg">
+
+                            {user === 'assassin' ? (
+                                <Link to={"/debtsAssassin"}>
+                                    <Dropdown.Item> Ver deudas </Dropdown.Item>
+                                </Link>
+                            ): null }
+
                             <Link to={user === 'assassin' ? "/debtsRegister" : "/formAssassin"}>
                                 <Dropdown.Item>{user === 'assassin' ? 'Registrar deuda' : 'Registrar asesino'}</Dropdown.Item>
                             </Link>

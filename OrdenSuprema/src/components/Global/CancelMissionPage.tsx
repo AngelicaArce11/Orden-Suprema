@@ -139,8 +139,8 @@ export const CancelMissionPage = () => {
             ) : null } 
 
             {/* Modal de confirmacion o cancelacion */}
-            <Modal size="md" show={openModal} onClose={() => setOpenModal(false)}>
-                <Modal.Body>
+            <Modal size="md" className='bg-slate-500/50' show={openModal} onClose={() => setOpenModal(false)}>
+                <Modal.Body className='border-2 border-cyan-500 rounded-xl'>
                     <div className='text-center'>
                         <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
                         <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
