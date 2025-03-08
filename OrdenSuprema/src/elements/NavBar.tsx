@@ -14,15 +14,43 @@ export const NavBar = ({user} : NavBarProps ) => {
     const [name , setName] = useState('');
     const [coins, setCoins] = useState('');
     const [avatar, setAvatar] = useState('');
+    const [refresh, setRefresh] = useState(false);
+
 
     useEffect(() => {
-        // Obtenemos el usuario
-        const data = localStorage.getItem("user");
-        const user = data ? JSON.parse(data) : null;
-        setName(user.name);
-        setCoins(user.totalCoins);
-        setAvatar(user.avatar);
-    }, []);
+
+        // Metodo para actualizar los atributos
+        const updateUserData = () => {
+            const data = localStorage.getItem("user");
+            const user = data ? JSON.parse(data) : null;
+            setName(user?.name || '');
+            setCoins(user?.totalCoins || '');
+            setAvatar(user?.avatar || '');
+        };
+    
+        updateUserData(); // Cargar datos iniciales
+    
+        // Metodo para manejar el cambio
+        const handleStorageChange = () => {
+            updateUserData();
+        };
+    
+        window.addEventListener("storage", handleStorageChange);
+    
+        // Intervalo para actualizar cada cierto tiempo
+        const interval = setInterval(() => {
+            const storedData = localStorage.getItem("user");
+            const user = storedData ? JSON.parse(storedData) : null;
+            if (user?.totalCoins !== coins) {
+                updateUserData();
+            }
+        }, 600); // Verifica cada segundo
+    
+        return () => {
+            window.removeEventListener("storage", handleStorageChange);
+            clearInterval(interval);
+        };
+    }, [coins]);
 
     const logout = () => {
         localStorage.removeItem("token"); 
@@ -97,7 +125,7 @@ export const NavBar = ({user} : NavBarProps ) => {
                             <Link to={user === 'assassin' ? "/debtsPayment" : "/debtsHighTable"}>
                                 <Dropdown.Item>{user === 'assassin' ? 'Pagar deuda' : 'Deudas entre asesinos' }</Dropdown.Item>
                             </Link>
-                            {user === 'highTable' ? (
+                            {user === 'order' ? (
                                 <Link to={"/locateAssassin"}>
                                     <Dropdown.Item> Ubicar asesino </Dropdown.Item>
                                 </Link>
