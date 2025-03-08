@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 interface MissionProps {
   mission: Mission;
   onMissionUpdated: () => void;
-  imageId: number;
 }
 
 export const MissionToConfirm = ({
@@ -12,7 +11,7 @@ export const MissionToConfirm = ({
   onMissionUpdated,
 }: MissionProps) => {
   const [executioner, setExecutioner] = useState<User>();
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
 
   //Fijar Executioner
   useEffect(() => {
@@ -57,7 +56,7 @@ export const MissionToConfirm = ({
         <div className="grid gap-8 md:grid-cols-2 lg:gap-12">
           <div>
             <div className="h-64 overflow-hidden rounded-3xl bg-transparent shadow-inner md:h-auto">
-              <a href= {mission.proofImage}>
+              <a href= {imageUrl}>
                 <img
                   src={imageUrl}
                   loading="lazy"

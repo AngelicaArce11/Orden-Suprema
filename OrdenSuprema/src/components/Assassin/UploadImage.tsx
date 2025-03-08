@@ -12,12 +12,11 @@ export const UploadImage = ({ missionId = 3 }: { missionId: number }) => {
 
   const handleUpload = async () => {
     if (!image) return;
-
     const formData = new FormData();
     formData.append("image", image);
 
     try {
-      await axios.put(`http://localhost:3000/Mission/complete/${missionId}`, formData, {
+      await axios.put(`http://localhost:3000/Mission/complete/${missionId}`, formData,  {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

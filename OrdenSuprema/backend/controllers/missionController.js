@@ -1,7 +1,8 @@
 import { Mission } from "../database/models/Mission.js";
 import multer from "multer";
 
-const upload = multer({ storage: multer.memoryStorage() });
+const storage = multer.memoryStorage(); // Almacena la imagen en memoria
+const upload = multer({ storage });
 
 // Para obtener todas las misiones
 export const getAllMissions = async (req, res) => {
@@ -116,15 +117,18 @@ export const acceptMission = async (req, res) => {
 }};
 
 export const completeMission = async (req, res) => {
+    
   try {
     const { id } = req.params;
-    const { proofImage } = req.body;
+    console.log("ID recibido:", id); // 👀 Verifica si el ID llega correctamente
 
     const mission = await Mission.findByPk(id);
+    console.log("hola");
+    
     if (!mission) {
         return res.status(404).json({ message: "Misión no encontrada" });
       }
-    mission.proofImage = `robohash.org/set_set1/bgset_bg1/${id}`;
+    //mission.proofImage = `robohash.org/set_set1/bgset_bg1/${id}`;
     mission.image = req.file.buffer;
     mission.status = "under_review";
     await mission.save();

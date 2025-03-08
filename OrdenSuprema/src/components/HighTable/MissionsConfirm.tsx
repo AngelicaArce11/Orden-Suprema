@@ -36,9 +36,8 @@ export const MissionsConfirm = () => {
         ) : (
           missions.map((mission: Mission) => (
             <MissionToConfirm
-              mission={mission}
-              onMissionUpdated={fetchMissions}
-              imageId={1}
+              mission={ mission }
+              onMissionUpdated={ fetchMissions }
             />
           ))
         )}

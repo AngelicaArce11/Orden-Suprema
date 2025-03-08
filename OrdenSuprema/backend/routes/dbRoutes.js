@@ -53,8 +53,8 @@ router.delete('/debt/:id', deleteDebt);
 router.get('/debt/:id/creditor', getDebtByCreditorId);
 router.get('/debt/:id/debtor', getDebtByDebtorId);
 
-router.put('/Mission/complete/:id', uploadMiddleware, confirmDebt);
-router.get('/Debt/image/:id', getDebtImage);
+router.put('/debt/complete/:id', uploadMiddleware, confirmDebt);
+router.get('/debt/image/:id', getDebtImage);
 
  //Missions
 router.get('/Mission', getAllMissions);
@@ -66,7 +66,6 @@ router.get('/Mission/image/:id', getMissionImage);
 
 
 router.post('/Mission', createMission);
-router.put('/Mission:id');
 router.put('/Mission/accept/:id', acceptMission);
 router.put('/Mission/complete/:id', uploadMiddleware, completeMission);
 router.put('/Mission/confirm/:id', confirmMission);
