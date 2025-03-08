@@ -33,6 +33,8 @@ import {
   updateUserLocation
 } from "../controllers/userController.js";
 
+import { uploadImage, getImage, uploadMiddleware } from "../controllers/imageController.js";
+
 const router = Router();
 
 //Login
@@ -82,6 +84,8 @@ router.put('/UserById/location/:id', updateUserLocation);
 router.delete('/UserById/:id');
 
 
-  
+  // Imagenes
+router.put("/upload", uploadMiddleware, uploadImage);
+router.get("/image/:id", getImage);
 
 export default router;

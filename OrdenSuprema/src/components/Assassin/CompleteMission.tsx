@@ -1,49 +1,38 @@
-import { useState } from 'react';
-import { NavBar } from "../../elements/NavBar";
-import { TableElement } from "../../elements/Table";
-import { ConfirmationModal } from "../../elements/ConfirmationModal";
-
-const missions = [
-    {objetivo: 'Marco Botton', hitman:'Capry', descripcion: 'Eliminar al objetivo sin ser detectado y recuperar documentos clasificados.', pago: 20},
-    {objetivo: 'Marco Botton', hitman:'Capry', descripcion: 'Eliminar al objetivo sin ser detectado y recuperar documentos clasificados.', pago: 20},
-    {objetivo: 'Marco Botton', hitman:'Capry', descripcion: 'Eliminar al objetivo sin ser detectado y recuperar documentos clasificados.', pago: 20},
-    {objetivo: 'Marco Botton', hitman:'Capry', descripcion: 'Eliminar al objetivo sin ser detectado y recuperar documentos clasificados.', pago: 20},
-    {objetivo: 'Marco Botton', hitman:'Capry', descripcion: 'Eliminar al objetivo sin ser detectado y recuperar documentos clasificados.', pago: 20},
-    {objetivo: 'Marco Botton', hitman:'Capry', descripcion: 'Eliminar al objetivo sin ser detectado y recuperar documentos clasificados.', pago: 20},
-    {objetivo: 'Marco Botton', hitman:'Capry', descripcion: 'Eliminar al objetivo sin ser detectado y recuperar documentos clasificados.', pago: 20},
-    {objetivo: 'Marco Botton', hitman:'Capry', descripcion: 'Eliminar al objetivo sin ser detectado y recuperar documentos clasificados.', pago: 20},
-    {objetivo: 'Marco Botton', hitman:'Capry', descripcion: 'Eliminar al objetivo sin ser detectado y recuperar documentos clasificados.', pago: 20},
-    {objetivo: 'Marco Botton', hitman:'Capry', descripcion: 'Eliminar al objetivo sin ser detectado y recuperar documentos clasificados.', pago: 20},
-]
+import axios from "axios";
+import { useState } from "react";
 
 export const CompleteMission = () => {
+  const [image, setImage] = useState<File | null>(null);
+  const [imageId, setImageId] = useState<number | null>(null);
 
-    const [openModal, setOpenModal] = useState(false);
-    const toggleModal = () => setOpenModal((prev) => !prev);
-    return(
-        <>
-            <NavBar user='assassin' />
-            <div className='flex justify-center items-center mt-30'>
-                <h5 className='text-white font-bold text-2xl lg:text-5xl'>
-                    Completar Misión
-                </h5>
-            </div>
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setImage(e.target.files[0]);
+    }
+  };
 
-            {/* Tabla con las misiones */}
-                    <div className='w-full pt-15 px-2 sm:px-15'>
-                        <TableElement header={['Nombre del objetivo', 'Nombre del asesino', 'Descripción', 'Pago', '', '']} showFileInput={true} data={missions} nameButton='Enviar'
-                    colorButton='greenToBlue'
-                    onClick={toggleModal}
-                />
-            </div>
+  const handleUpload = async () => {
+    if (!image) return;
 
-            {/* Modal de confirmación */}
-            <ConfirmationModal
-                open={openModal}
-                onClose={toggleModal}
-                onConfirm={toggleModal}
-            />
-        </>
-    )
+    const formData = new FormData();
+    formData.append("image", image);
 
-}
+    try {
+      const response = await axios.put("http://localhost:3000/upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      setImageId(response.data.imageId);
+    } catch (error) {
+      console.error("Error al subir la imagen:", error);
+    }
+  };
+
+  return (
+    <div className="mt-20">
+      <input type="file" accept="image/*" onChange={handleFileChange} />
+      <button onClick={handleUpload}>Subir Imagen</button>
+      {imageId && <p>Imagen subida con ID: {imageId}</p>}
+    </div>
+  );
+};
