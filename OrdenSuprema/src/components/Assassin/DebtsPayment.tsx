@@ -1,208 +1,105 @@
-// import { useState } from 'react';
-// import { TableElement } from "../../elements/Table";
-// import { ConfirmationModal } from "../../elements/ConfirmationModal";
-
-// const missions = [
-//     { creditorId: 'Marco Botton', description: 'Eliminar al objetivo sin ser detectado y recuperar documentos clasificados.', is_completed: 'incompleto' },
-//     { creditorId: 'Carmen Flores', description: 'Rescatar a un científico clave secuestrado.', is_completed: 'incompleto' }
-// ];
-
-
-// export const DebtsPayment = () => {
-//     const [openModal, setOpenModal] = useState(false);
-
-//     const toggleModal = () => setOpenModal((prev) => !prev);
-
-//     return (
-//         <>
-            
-//             <div className='flex justify-center items-center mt-30'>
-//                 <h5 className='text-white font-bold text-2xl lg:text-5xl'>
-//                     Pagar Deudas
-//                 </h5>
-//             </div>
-
-//             {/* Tabla con las misiones */}
-//             <div className='w-full pt-15 px-2 sm:px-15'>
-//                 <TableElement
-//                     header={['Nombre del Acreedor', 'Descripción', 'Estado', '', '']}
-//                     showFileInput={true}
-//                     data={missions}
-//                     nameButton='Enviar'
-//                     colorButton='greenToBlue'
-//                     onClick={toggleModal}
-//                 />
-//             </div>
-
-//             {/* Modal de confirmación */}
-//             <ConfirmationModal
-//                 open={openModal}
-//                 onClose={toggleModal}
-//                 onConfirm={toggleModal}
-//             />
-//         </>
-//     );
-// }
-
-// import { useEffect, useState } from 'react';
-// import axios from 'axios';
-// import { TableElement } from "../../elements/Table";
-// import { ConfirmationModal } from "../../elements/ConfirmationModal";
-
-// export const DebtsPayment = () => {
-//     const [openModal, setOpenModal] = useState(false);
-//     const [missions, setMissions] = useState([]);
-//     const [selectedDebtId, setSelectedDebtId] = useState(null);
-//     const [proofImage, setProofImage] = useState(null);
-
-//     // Obtenemos al usuario
-//     const data = localStorage.getItem("user");
-//     const userId = data ? JSON.parse(data).id : null;
-
-//     // Obtener las deudas con `proof_image` en NULL
-//     useEffect(() => {
-//         if (!userId) return;
-
-//         axios.get(`http://localhost:3000/debt/${userId}/no-proof`)
-//             .then(({ data }) => setMissions(data))
-//             .catch(error => console.error('Error al obtener deudas:', error));
-//     }, [userId]);
-
-//     // Manejar la carga del comprobante de pago
-//     const handleFileChange = (event) => {
-//         const file = event.target.files[0];
-//         if (file) {
-//             const reader = new FileReader();
-//             reader.onloadend = () => {
-//                 setProofImage(reader.result); // Guardar la imagen como Base64
-//             };
-//             reader.readAsDataURL(file);
-//         }
-//     };
-
-//     // Manejar el envío del comprobante de pago
-//     const handleSendProof = async () => {
-//         if (!proofImage) {
-//             alert("Por favor, selecciona un comprobante antes de enviar.");
-//             return;
-//         }
-
-//         try {
-//             await axios.put(
-//                 `http://localhost:3000/debt/${selectedDebtId}/proof`,
-//                 { proof_image: proofImage }  // Enviar el comprobante en el body
-//             );
-
-//             alert('Comprobante enviado con éxito.');
-//             setOpenModal(false);
-
-//             // Recargar la lista de misiones
-//             axios.get(`http://localhost:3000/debt/${userId}/no-proof`)
-//                 .then(({ data }) => setMissions(data));
-//         } catch (error) {
-//             console.error('Error al enviar el comprobante:', error);
-//             alert('Error al enviar el comprobante. Intenta de nuevo.');
-//         }
-//     };
-
-//     // Abrir el modal y capturar el ID de la deuda seleccionada
-//     const handleOpenModal = (debtId) => {
-//         setSelectedDebtId(debtId);
-//         setOpenModal(true);
-//     };
-
-//     return (
-//         <>
-//             <div className='flex justify-center items-center mt-30'>
-//                 <h5 className='text-white font-bold text-2xl lg:text-5xl'>
-//                     Pagar Deudas
-//                 </h5>
-//             </div>
-
-//             {/* Tabla con las deudas */}
-//             <div className='w-full pt-15 px-2 sm:px-15'>
-//                 <TableElement
-//                     header={['Nombre del Acreedor', 'Descripción', 'Estado', '', '', '']}
-//                     showFileInput={true} // Mostrar el campo para subir comprobantes
-//                     onFileChange={handleFileChange} // Guardar la imagen seleccionada
-//                     data={missions.map(({ creditorId, description, is_completed, id }) => ({
-//                         creditorId,
-//                         description,
-//                         status: is_completed ? 'Completada' : 'Incompleta',
-                        
-//                         onClick: () => handleOpenModal(id)
-//                     }))}
-//                     nameButton='Enviar'
-//                     colorButton='greenToBlue'
-//                 />
-//             </div>
-
-//             {/* Modal de confirmación */}
-//             <ConfirmationModal
-//                 open={openModal}
-//                 onClose={() => setOpenModal(false)}
-//                 onConfirm={handleSendProof}
-//             />
-//         </>
-//     );
-// };
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useState, useEffect } from 'react';
 import { TableElement } from "../../elements/Table";
+import { ConfirmationModal } from "../../elements/ConfirmationModal";
+import axios from "axios";
 
 export const DebtsPayment = () => {
-    const [missions, setMissions] = useState([]);
-    const [selectedDebtId, setSelectedDebtId] = useState(null);
-    const [proofImage, setProofImage] = useState(null);
+    // Estado para manejar el estado del modal de confimación
+    const [openModal, setOpenModal] = useState(false);
+    // Estado para manejar las deudas en las que el asesino es deudor
+    const [debts, setDebts] = useState([]);
+    // Estado para conocer el ID del usuario 
+    const [IDUser, setIdUser] = useState(-1);
+    // Estado para manejar los nombres de los acrededores
+    const [names, setNames] = useState<string[]>([]);
+    // Estado para manejar los archivos cargados
+    const [files, setFiles] = useState<{ [key: number]: File | null }>({});
+    // Estado para manejar la aceptacion de una mision, tiene el indice de la fila de la mision a aceptar
+    const [accept, setAccept] = useState<number>();
 
-    // Obtenemos al usuario
-    const data = localStorage.getItem("user");
-    const userId = data ? JSON.parse(data).id : null;
-
-    // Obtener las deudas con `proof_image` en NULL
+    // Obtenemos los datos de la BD 
     useEffect(() => {
-        if (!userId) return;
 
-        axios.get(`http://localhost:3000/debt/${userId}/no-proof`)
-            .then(({ data }) => setMissions(data))
-            .catch(error => console.error('Error al obtener deudas:', error));
-    }, [userId]);
+        const data = localStorage.getItem("user");
+        const user = data ? JSON.parse(data) : null;
+        if (!user || !user.id) return; // Validación para evitar errores si el usuario no existe
 
-    // Manejar la carga del comprobante de pago
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setProofImage(reader.result); // Guardar la imagen como Base64
-            };
-            reader.readAsDataURL(file);
+        axios
+            .get(`http://localhost:3000/debt/${user.id}/debtor`)
+            .then((response) => {
+                setDebts(
+                    response.data.map((debt: any) => ({
+                        id: debt.id,
+                        creditorId : debt.creditorId,
+                        description: debt.description,
+                        is_completed: debt.is_completed
+                    })).filter((debt: any) => debt.is_completed === false)
+                )
+                setIdUser(user.id);
+            }
+            )
+            .catch((error) => console.error("Error fetching debts:", error));
+    }, []);
+
+    // Metodo que permite conocer el nombre del asesino
+    const namePerson = async (id: number) => {
+        if (!names[id]) {  
+            const { data } = await axios.get(`http://localhost:3000/UserById/${id}`);
+            setNames(prev => ({ ...prev, [id]: data.name }));    
         }
     };
 
-    // Manejar el envío del comprobante de pago
-    const handleSendProof = async (debtId) => {
-        if (!proofImage) {
-            alert("Por favor, selecciona un comprobante antes de enviar.");
-            return;
-        }
+    // Obtener los nombres de los acreedores
+    useEffect(() => {
+        debts.forEach(({ creditorId }) => {
+            namePerson(creditorId);
+        });
+    }, [debts]);
+
+     // Este metodo sirve para obtener la fila de la mision que se esta aceptando
+    const clickAccept = (row: number) => {
+        setAccept(row);
+        setOpenModal(true);
+    };
+
+    // Función para manejar la carga de archivos
+    const handleFileChange = (rowIndex: number, file: File | null) => {
+        setFiles((prevFiles) => ({
+            ...prevFiles,
+            [rowIndex]: file, // Asociamos el archivo con la fila correspondiente
+        }));
+        console.log(`Archivo subido en la fila ${rowIndex}:`, file);
+    };
+
+    const toggleModal = () => setOpenModal((prev) => !prev);
+
+    const handleUpload = async (rowIndex: number) => {
+
+        const image = files[rowIndex]
+        if (!image) return;
+
+        const formData = new FormData();
+        formData.append("image", image);
 
         try {
-            await axios.put(
-                `http://localhost:3000/debt/${debtId}/proof`,
-                { proof_image: proofImage }  // Enviar el comprobante en el body
-            );
+            await axios.put(`http://localhost:3000/debt/pay/${debts[rowIndex].id}`,  formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+            });
 
-            alert('Comprobante enviado con éxito.');
-
-            // Recargar la lista de misiones
-            axios.get(`http://localhost:3000/debt/${userId}/no-proof`)
-                .then(({ data }) => setMissions(data));
+            alert("Deuda pagada con éxito");
+            setOpenModal(false);
         } catch (error) {
-            console.error('Error al enviar el comprobante:', error);
-            alert('Error al enviar el comprobante. Intenta de nuevo.');
+            console.error("Error al subir la imagen:", error);
+            setOpenModal(false);
         }
     };
+
+    // Obtener los campos necesarios para la visualización
+    let data = debts.map(({ creditorId, description, is_completed }) => [
+        names[creditorId],
+        description,
+        is_completed ? "Completada" : "Sin completar"
+    ]);
 
     return (
         <>
@@ -212,22 +109,26 @@ export const DebtsPayment = () => {
                 </h5>
             </div>
 
-            {/* Tabla con las deudas */}
+            {/* Tabla con las debts */}
             <div className='w-full pt-15 px-2 sm:px-15'>
                 <TableElement
-                    header={['Nombre del Acreedor', 'Descripción', 'Estado', '', '', '']}
-                    showFileInput={true} // Mostrar el campo para subir comprobantes
-                    onFileChange={handleFileChange} // Guardar la imagen seleccionada
-                    data={missions.map(({ creditorId, description, is_completed, id }) => ({
-                        creditorId,
-                        description,
-                        status: is_completed ? 'Completada' : 'Incompleta',
-                        onClick: () => handleSendProof(id) 
-                    }))}
+                    header={['Nombre del Acreedor', 'Descripción', 'Estado', 'Comprobante', '']}
+                    data={data}
                     nameButton='Enviar'
                     colorButton='greenToBlue'
+                    onClick={clickAccept}
+                    showFileInput={true}
+                    onFileChange={handleFileChange}
                 />
             </div>
+
+
+            {/* Modal de confirmación */}
+            <ConfirmationModal
+                open={openModal}
+                onClose={toggleModal}
+                onConfirm={() => accept !== undefined ? handleUpload(accept) : setOpenModal(false)}
+            />
         </>
     );
-};
+}
