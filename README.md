@@ -1,21 +1,15 @@
-## Configuración de PostgreSQL para Desarrollo Local
+# Orden Suprema - API
 
-Para ejecutar este proyecto, instala y configura PostgreSQL en tu máquina local.
+Este proyecto permite la gestión de órdenes y asesinos dentro del sistema de "Orden Suprema". A continuación, encontrarás instrucciones para crear una orden y las credenciales de administrador.
 
+## Funcionalidades
+- **Gestión de usuarios:** Creación y administración de usuarios con roles de "order" y "assassin".
+- **Asignación de misiones:** Creación de misiones con un objetivo, descripción y recompensa.
+- **Gestión de deudas:** Registro de deudas entre usuarios con descripción y valores específicos.
+- **Autenticación de usuarios:** Inicio de sesión con email y contraseña.
 
-### Crear Base de Datos y Usuario
-Accede a PostgreSQL:
-```sh
-psql -U postgres
-```
-Ejecuta:
-```sql
-CREATE DATABASE "OrdenSuprema";
-CREATE USER postgres WITH PASSWORD 'postgres123';
-GRANT ALL PRIVILEGES ON DATABASE "OrdenSuprema" TO postgres;
-```
-
-También puedes entrar a `backend/database/sequelize.js` y modificar los parametros para usar otra base de datos
+## Requisitos
+- Node.js instalado
 
 ### Para correr el proyecto:
 Se requiere ejecutan los siguientes comandos en la terminal
@@ -31,6 +25,13 @@ Correr el  Back:
 cd OrdenSuprema
 npm run back
 ```
+
+## Inicio de Sesión como Administrador
+Para acceder con privilegios de administrador, puedes usar las siguientes credenciales:
+- **Correo:** `chanci@gmail.com`
+- **Contraseña:** `securepassword123`
+
+Dentro de la aplicación podrás registrar usuarios Asesinos, y al correo de estos se le enviará las credenciales de acceso
 
 
 
