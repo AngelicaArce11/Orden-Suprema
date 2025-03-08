@@ -21,14 +21,16 @@ export const loginUser = async (req, res) => {
     if (!passwordMatch) {
         return res.status(401).json({ message: "Contraseña incorrecta" });
     }
-    // console.log(process.env);
-    // Generar token con JWT
-    // const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, {
-    //   expiresIn: "2h",
-    // });
+    console.log(process.env);
+    Generar token con JWT
+    const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, {
+      expiresIn: "2h",
+    });
 
     // res.json({ message: "Login exitoso", token, role: user.type});
-    res.json({ message: "Login exitoso", role: user.type, user: user});
+
+    res.json({ message: "Login exitoso", token, role: user.type, user: user});
+    // res.json({ message: "Login exitoso", role: user.type, user: user});
 
   } catch (error) {
     res.status(500).json({ message: error.message });

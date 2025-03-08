@@ -6,7 +6,7 @@ interface TableElementProps {
     header: string[];
     data: object[];
     showModalColumn?: boolean;
-    buttons?: { name: string, color: string, onClick: () => void }[];
+    buttons?: (id: number) => { name: string; color: string; onClick: () => void }[];
 }
 
 export const TableElement = ({ header, data, showModalColumn = false, buttons }: TableElementProps) => {
@@ -61,7 +61,7 @@ export const TableElement = ({ header, data, showModalColumn = false, buttons }:
                             </Table.Cell>
                             {buttons && (
                                 <Table.Cell className="text-center flex flex-wrap justify-center items-center space-x-2">
-                                    {buttons.map((button, index) => (
+                                    {buttons && buttons(row.id)?.map((button, index) => (
                                         <Button
                                             key={index}
                                             outline
@@ -90,9 +90,9 @@ export const TableElement = ({ header, data, showModalColumn = false, buttons }:
             </div>
 
             {/* Modal para ver el comprobante */}
-            <Modal show={isOpen} onClose={() => setIsOpen(false)}>
+            <Modal show={isOpen} onClose={() => setIsOpen(false)} className='bg-slate-500/50' >
                 <Modal.Header>Comprobante</Modal.Header>
-                <Modal.Body className="flex justify-center">
+                <Modal.Body className='border-2 border-cyan-500 rounded-xl'>
                     {modalImage ? (
                         <img src={modalImage} alt="Comprobante" className="max-w-full h-auto" />
                      ) : (

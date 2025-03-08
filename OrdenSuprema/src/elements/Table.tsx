@@ -81,6 +81,7 @@ export const TableElement = ({ header, data, nameButton, colorButton, onClick, s
                                         <Button
                                             outline
                                             size='md'
+                                            
                                             gradientDuoTone={colorButton}
                                             onClick={() => onClick && onClick(rowIndex)}
                                         >
