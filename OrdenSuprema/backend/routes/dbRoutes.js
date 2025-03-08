@@ -52,7 +52,6 @@ router.put('/debt/:id', updateDebt);
 router.delete('/debt/:id', deleteDebt);
 router.get('/debt/:id/creditor', getDebtByCreditorId);
 router.get('/debt/:id/debtor', getDebtByDebtorId);
-
 router.put('/Mission/complete/:id', uploadMiddleware, confirmDebt);
 router.get('/Debt/image/:id', getDebtImage);
 
