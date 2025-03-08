@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Pay } from "../Assassin/Pay";
+import { Pay } from "../../elements/Pay.tsx";
 import payValue from "../../services/cost.ts"
 
 interface LocationPaywallProps {

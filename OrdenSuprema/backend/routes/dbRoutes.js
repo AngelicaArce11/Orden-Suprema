@@ -22,7 +22,8 @@ import {
   confirmMission,
   updateMission,
   deleteMission,
-  getMissionsAssignedTo
+  getMissionsAssignedTo,
+  uploadMiddleware
 } from "../controllers/missionController.js";
 
 import {
@@ -35,9 +36,7 @@ import {
   updateUserCoins,
   updateUserLocation
 } from "../controllers/userController.js";
-import { get } from "http";
 
-import { uploadImage, getImage, uploadMiddleware } from "../controllers/imageController.js";
 
 const router = Router();
 
@@ -69,13 +68,6 @@ router.put('/Mission/confirm/:id', confirmMission);
 router.delete('/Mission/delete/:id', deleteMission);
 router.get('/Mission/:id');
 
- //Transactions
-router.get('/Transaction');
-router.post('/Transaction');
-router.put('/Transaction/:id');
-router.delete('/Transaction/:id');
-router.get('/Transaction/:id');
-
  //Users
 router.get('/User', getAllUsers);
 router.get('/UserById/:id', getUser);
@@ -90,9 +82,5 @@ router.put('/UserById/:id', updateUserCoins);
 router.put('/UserById/location/:id', updateUserLocation);
 router.delete('/UserById/:id');
 
-
-  // Imagenes
-router.put("/upload", uploadMiddleware, uploadImage);
-router.get("/image/:id", getImage);
 
 export default router;
