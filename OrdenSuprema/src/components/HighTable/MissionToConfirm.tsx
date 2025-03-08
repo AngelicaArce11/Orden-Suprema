@@ -52,12 +52,14 @@ export const MissionToConfirm = ({
         <div className="grid gap-8 md:grid-cols-2 lg:gap-12">
           <div>
             <div className="h-64 overflow-hidden rounded-3xl bg-transparent shadow-inner md:h-auto">
-              <img
-                src={mission.proofImage}
-                loading="lazy"
-                alt="Foto de Prueba"
-                className="h-full w-full object-cover object-center"
-              />
+              <a href= {mission.proofImage}>
+                <img
+                  src={mission.proofImage}
+                  loading="lazy"
+                  alt="Foto de Prueba"
+                  className="h-full w-full object-cover object-center"
+                />
+              </a>
             </div>
           </div>
 
