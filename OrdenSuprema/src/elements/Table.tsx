@@ -112,3 +112,9 @@ export const TableElement = ({ header, data, nameButton, colorButton, onClick, s
         </>
     );
 };
+
+
+
+
+
+

@@ -93,11 +93,16 @@ export const CompleteMission = () => {
     // Confirmar el envío del comprobante
     const confirmSendProof = async () => {
         if (selectedMissionIndex === undefined) return;
+        
 
         const data = localStorage.getItem("user");
         const user = data ? JSON.parse(data) : null;
     
         const selectedMissionId = missions[selectedMissionIndex].id;
+        console.log('✅ Enviando datos:', {
+            missionId: selectedMissionId,
+            status: 'under_review'
+        }); // <-- Agregado para verificar datos
     
         try {
             await axios.put(`http://localhost:3000/Mission/submitProof/${user.id}`, {
@@ -140,10 +145,6 @@ export const CompleteMission = () => {
                 onConfirm={confirmSendProof}
             />
 
-            {/* Componente de subida de imágenes */}
-            {selectedMissionIndex !== undefined && (
-                <UploadImage missionId={missions[selectedMissionIndex].id} />
-            )}
         </>
     );
 }

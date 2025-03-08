@@ -28,7 +28,8 @@ import {
   deleteMission,
   getMissionsAssignedTo,
   getMissionsAssignedToByStatus,
-  uploadMiddleware
+  uploadMiddleware,
+  submitProof
 } from "../controllers/missionController.js";
 
 import {
@@ -77,7 +78,7 @@ router.put('/Mission/complete/:id', uploadMiddleware, completeMission);
 router.put('/Mission/confirm/:id', confirmMission);
 router.delete('/Mission/delete/:id', deleteMission);
 router.get('/Mission/:id');
-router.put('/Mission/submitProof/:userId', updateDebtWithProof);
+router.put('/Mission/submitProof/:userId', submitProof);
 
  //Users
 router.get('/User', getAllUsers);
