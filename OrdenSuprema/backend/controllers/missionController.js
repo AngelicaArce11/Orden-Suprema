@@ -197,6 +197,8 @@ export const deleteMission = async (req, res) => {
 
 export const submitProof = async (req, res) => {
     try {
+        console.log('✅ Datos recibidos en el body:', req.body); // <-- Verifica que `missionId` esté presente
+        console.log('✅ ID del usuario recibido en params:', req.params);
         const { userId } = req.params;         // Obtener el ID del usuario desde la URL
         const { missionId, status, proofImage } = req.body; // Obtener el ID de la misión y otros datos del body
 
