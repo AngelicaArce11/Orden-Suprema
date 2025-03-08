@@ -8,38 +8,53 @@ export const getAllDebts = async (req, res) => {
         return res.status(500).json({message: error.message});
     }
 };
-
-//Controlador para obtener todas las deudas por usuario
+// Controlador para obtener todas las deudas del acreedor
 export const getDebtByCreditorId = async (req, res) => {
     try {
         const { id } = req.params;
-        const creditorId = Number(id);
+        const creditorId = parseInt(id, 10);
 
-        if (!creditorId || creditorId <= 0) {
+        if (isNaN(creditorId) || creditorId <= 0) {
             return res.status(400).json({ message: 'ID inválido' });
         }
 
-        const creditorExists = await Creditor.findByPk(creditorId);
-        if (!creditorExists) {
-            return res.status(404).json({ message: 'Acreedor no encontrado' });
-        }
+        const debtCreditor = await Debt.findAll({ where: { creditorId } });
 
-        const debtCreditor = await Debt.findAll({
-            where: {
-                creditorId
-            }
-        });
-
-        if (debtCreditor.length === 0) {
-            return res.status(404).json({ message: 'Deudas no encontradas' });
+        if (!debtCreditor || debtCreditor.length === 0) {
+            return res.status(404).json({ message: 'No se encontraron deudas para este acreedor.' });
         }
 
         res.json(debtCreditor);
 
     } catch (error) {
-        return res.status(500).json({ message: error.message });
+        console.error("Error en el controlador de acreedor:", error.message);
+        res.status(500).json({ message: 'Error interno del servidor' });
     }
-}
+};
+
+// Controlador para obtener todas las deudas del deudor
+export const getDebtByDebtorId = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const debtorId = parseInt(id, 10);
+
+        if (isNaN(debtorId) || debtorId <= 0) {
+            return res.status(400).json({ message: 'ID inválido' });
+        }
+
+        const debtDebtor = await Debt.findAll({ where: { debtorId } });
+
+        if (!debtDebtor || debtDebtor.length === 0) {
+            return res.status(404).json({ message: 'No se encontraron deudas para este deudor.' });
+        }
+
+        res.json(debtDebtor);
+
+    } catch (error) {
+        console.error("Error en el controlador de deudor:", error.message);
+        res.status(500).json({ message: 'Error interno del servidor' });
+    }
+};
 
 export const createDebt = async (req, res) => {
     try {

@@ -2,61 +2,52 @@ import React, { useState, useEffect } from "react";
 import { NavBar } from "../../elements/NavBar";
 import { TableElement } from "../../elements/Table";
 import { Dropdown, DropdownItem } from "flowbite-react";
-
-
-const assassinDebts = [
-  { deudor: "John Doe", acreedor: "Capry", descripcion: "HOLA QUNEIUNF UNCEIUNAIUNFE CUNIANCIUAENCIUEAUINDCI UANIUFNEAIUCBIAEBCIUD IJANCIUAE ICBNAIUBFCIF EANCIUEBIACNIUADSIC U CUABC IUEBYU AYUDCBIUAEFYUI ADCYU EUCBUYA CYAE BFCAUYEB UAECYUABCUYBADIUCB AUEBCAUEBC S 4", estado: "Completada" },
-  { deudor: "Capry", acreedor: "John Doe", descripcion: "Deuda 1", estado: "Incompleta" },
-  { deudor: "Capry", acreedor: "Jane Doe", descripcion: "Deuda 2", estado: "Completada" },
-  { deudor: "Jane Doe", acreedor: "Capry", descripcion: "Deuda 3", estado: "Incompleta" },
-  { deudor: "Capry", acreedor: "John Doe", descripcion: "Deuda 5", estado: "Completada" },
-  { deudor: "John Doe", acreedor: "Capry", descripcion: "Deuda 6", estado: "Incompleta" },
-  { deudor: "Capry", acreedor: "Jane Doe", descripcion: "Deuda 7", estado: "Completada" },
-  { deudor: "Jane Doe", acreedor: "Capry", descripcion: "Deuda 8", estado: "Incompleta" },
-  { deudor: "Capry", acreedor: "John Doe", descripcion: "Deuda 9", estado: "Completada" },
-  { deudor: "John Doe", acreedor: "Capry", descripcion: "Deuda 10", estado: "Incompleta" },
-  { deudor: "Capry", acreedor: "Jane Doe", descripcion: "Deuda 11", estado: "Completada" },
-  { deudor: "Jane Doe", acreedor: "Capry", descripcion: "Deuda 12", estado: "Incompleta" },
-  { deudor: "Capry", acreedor: "John Doe", descripcion: "Deuda 13", estado: "Completada" },
-  { deudor: "John Doe", acreedor: "Capry", descripcion: "Deuda 14", estado: "Incompleta" },
-  { deudor: "Capry", acreedor: "Jane Doe", descripcion: "Deuda 15", estado: "Completada" },
-  { deudor: "Jane Doe", acreedor: "Capry", descripcion: "Deuda 16", estado: "Incompleta" },
-  { deudor: "Capry", acreedor: "John Doe", descripcion: "Deuda 17", estado: "Completada" },
-  { deudor: "John Doe", acreedor: "Capry", descripcion: "Deuda 18", estado: "Incompleta" },
-  { deudor: "Capry", acreedor: "Jane Doe", descripcion: "Deuda 19", estado: "Completada" },
-  { deudor: "Jane Doe", acreedor: "Capry", descripcion: "Deuda 20", estado: "Incompleta" },
-  { deudor: "Capry", acreedor: "John Doe", descripcion: "Deuda 21", estado: "Completada" },
-  { deudor: "John Doe", acreedor: "Capry", descripcion: "Deuda 22", estado: "Incompleta" },
-
-];
+import axios from "axios";
 
 export const DebtsAssassin = () => {
   const [filterCompleted, setFilterCompleted] = useState(false);
   const [filterNCompleted, setFilterNCompleted] = useState(false);
-  const [filteredAssassin, setFilteredAssassin] = useState<{ deudor: string; acreedor: string; descripcion: string; estado: string }[]>([]);
-  const [section, setSection] = useState('deudasADeber'); // Estado para manejar la sección actual
+  const [filteredAssassin, setFilteredAssassin] = useState([]);
+  const [section, setSection] = useState('deudasADeber'); // 'deudasADeber' o 'deudasACobrar'
+
+  // Obtenemos al usuario
+  const data = localStorage.getItem("user");
+  const user = data ? JSON.parse(data) : null;
 
   useEffect(() => {
-    let filtered = assassinDebts;
-  
-    if (section === 'deudasADeber') {
-      filtered = filtered.filter((debt) => debt.deudor === 'Capry');
-    } else if (section === 'deudasACobrar') {
-      filtered = filtered.filter((debt) => debt.acreedor === 'Capry');
-    }
-  
-    if (filterCompleted && !filterNCompleted) {
-      filtered = filtered.filter((debt) => debt.estado.toLowerCase() === "completada");
-    } else if (!filterCompleted && filterNCompleted) {
-      filtered = filtered.filter((debt) => debt.estado.toLowerCase() === "incompleta");
-    } else if (filterCompleted && filterNCompleted) {
-      // No se necesita filtrar por estado si ambos filtros están activados
-    } else {
-      // Si ninguno de los filtros está activado, no se necesita filtrar por estado
-    }
-  
-    setFilteredAssassin(filtered);
-  }, [filterCompleted, filterNCompleted, section]);
+    if (!user || !user.id) return; // Validación para evitar errores si el usuario no existe
+
+    const endpoint = section === 'deudasADeber'
+    ? `http://localhost:3000/api/debt/${user.id}?role=debtor`
+    : `http://localhost:3000/api/debt/${user.id}?role=creditor`;
+
+    axios.get(endpoint)
+      .then(({ data }) => {
+        let filtered = data;
+
+        // Filtrado según el estado booleano
+        if (filterCompleted && !filterNCompleted) {
+          filtered = filtered.filter(debt => debt.is_completed === true); // ✅ Completadas
+        } else if (!filterCompleted && filterNCompleted) {
+          filtered = filtered.filter(debt => debt.is_completed === false); // ✅ Incompletas
+        }
+
+        setFilteredAssassin(filtered);
+      })
+      .catch((error) => {
+        console.error("Error al obtener los datos del backend:", error);
+        setFilteredAssassin([]);
+      });
+
+  }, [user?.id, section, filterCompleted, filterNCompleted]);
+
+  // Mapeo usando exclusivamente las columnas del backend
+  const dataDebts = filteredAssassin.map(({ debtorId, creditorId, description, is_completed }) => [
+    debtorId,
+    creditorId,
+    description,
+    is_completed ? "Completada" : "Incompleta"
+  ]);
 
   return (
     <>
@@ -66,12 +57,8 @@ export const DebtsAssassin = () => {
           {section === 'deudasADeber' ? 'Deudas a Deber' : 'Deudas a Cobrar'}
         </h5>
       </div>
-      
-      {/* Botones para cambiar de sección */}
 
-      {/* Tabla con los datos filtrados */}
       <div className='w-full pt-15 pr-4 pl-4 px-2 sm:px-30'> 
-        {/* Botones para cambiar de sección y Checkboxes para los filtros */}
         <div className="flex justify-between items-start gap-6 mt-10"> 
           <Dropdown dismissOnClick={false} renderTrigger={() => (
             <button className="bg-sky-950 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
@@ -80,38 +67,52 @@ export const DebtsAssassin = () => {
           )}
           placement="right">
             <DropdownItem onClick={() => setSection('deudasADeber')}>
-            Deudas a Deber
+              Deudas a Deber
             </DropdownItem>
             <DropdownItem onClick={() => setSection('deudasACobrar')}>
               Deudas a Cobrar
             </DropdownItem>
           </Dropdown>
-        
 
-
+          {/* Checkboxes con diseño original */}
           <div className="flex flex-col items-end gap-2 ">
             <label className="flex justify-end items-center cursor-pointer text-white gap-2 text-right">
-              <input type="checkbox" checked={filterCompleted} onChange={() => setFilterCompleted(!filterCompleted)} className="hidden peer" />
+              <input 
+                type="checkbox" 
+                checked={filterCompleted} 
+                onChange={() => setFilterCompleted(!filterCompleted)} 
+                className="hidden peer"
+              />
               <span className="w-5 h-5 border-2 border-white rounded-md flex justify-center items-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
-                {filterCompleted && <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                </svg>}
+                {filterCompleted && (
+                  <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                )}
               </span>
-            Completadas
+              Completadas
             </label>
 
             <label className="flex items-center cursor-pointer text-white gap-2 text-right mb-2">
-              <input type="checkbox" checked={filterNCompleted} onChange={() => setFilterNCompleted(!filterNCompleted)} className="hidden peer" />
+              <input 
+                type="checkbox" 
+                checked={filterNCompleted} 
+                onChange={() => setFilterNCompleted(!filterNCompleted)} 
+                className="hidden peer"
+              />
               <span className="w-5 h-5 border-2 border-white rounded-md flex justify-center items-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
-                {filterNCompleted && <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                </svg>}
+                {filterNCompleted && (
+                  <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                )}
               </span>
               Incompletas
             </label>
           </div>
         </div>
-        <TableElement header={[ 'Deudor','Acreedor', 'Descripión', 'Estado']} data={filteredAssassin}/>
+
+        <TableElement header={['Deudor', 'Acreedor', 'Descripción', 'Estado']} data={dataDebts} />
       </div>
     </>
   );
