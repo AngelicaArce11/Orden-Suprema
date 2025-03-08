@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Pay } from "../Assassin/Pay";
+import payValue from "../../services/cost.ts"
 
 interface LocationPaywallProps {
   users: Assassin[];
@@ -12,7 +13,6 @@ export const LocationPaywall = ({
 }: LocationPaywallProps) => {
   const [isPayed, setisPayed] = useState<boolean | null>(null);
   const [selectedUser, setSelectedUser] = useState<Assassin | null>(null);
-  const payValue = 50;
   const targetRef = useRef<HTMLDivElement>(null);
 
   const role_verification = () => {
