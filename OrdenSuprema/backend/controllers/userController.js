@@ -141,13 +141,28 @@ export const createOrder = async (req, res) => {
     }
 };
 
-export const updateUser = async (req, res) => {
+export const updateUserCoins = async (req, res) => {
     try { //Para actualizar el saldo
     const { id } = req.params;
     const {set, coins} = req.body
 
     const user = await User.findByPk(id);
     user.totalCoins += coins;
+    await user.save();
+
+    res.json(user); 
+    } catch (error) {
+        return res.status(500).json({message: error.message});
+}};
+
+export const updateUserLocation = async (req, res) => {
+    try { //Para actualizar el saldo
+    const { id } = req.params;
+    const {latitude, longitude} = req.body
+
+    const user = await User.findByPk(id);
+    user.latitude = latitude;
+    user.longitude = longitude;
     await user.save();
 
     res.json(user); 

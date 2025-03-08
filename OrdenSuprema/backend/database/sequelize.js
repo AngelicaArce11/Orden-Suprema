@@ -1,11 +1,24 @@
 import { Sequelize } from 'sequelize'
+import dotenv from 'dotenv';
 
-export const sequelize = new Sequelize(
-    'OrdenSuprema',
-    'postgres',
-    'capry2512',
-    {
-        host: 'localhost',
-        dialect: 'postgres'
-    }
-);
+dotenv.config();
+
+export const sequelize = new Sequelize(process.env.DATABASE_URL,{
+    dialect: 'postgres',
+    dialectOptions: {
+        ssl: {
+            require: true,
+            rejectUnauthorized: false, 
+        }
+    },
+    logging: false 
+});
+
+    // 'OrdenSuprema',
+    // 'postgres',
+    // 'postgres123',
+    // {
+    //     host: 'localhost',
+    //     dialect: 'postgres'
+    // }
+// );

@@ -46,12 +46,23 @@ export const NavBar = ({user} :  NavBarProps) => {
                     >
                         <div className="bg-gray-800 text-white rounded-lg">
                             {user === 'assassin' ? (
-                                <Dropdown.Item> Ver misiones publicadas </Dropdown.Item>
+                                <Link to={"/missionsAssassin"}>
+                                    <Dropdown.Item> Ver misiones publicadas </Dropdown.Item>   
+                                </Link>
                             ): null }
                             
-                            <Dropdown.Item> Publicar misión </Dropdown.Item>
-                            <Dropdown.Item>{user === 'assasin' ? 'Completar misión' : 'Confirmar misión'}</Dropdown.Item>
-                            <Dropdown.Item> Cancelar misión </Dropdown.Item>
+                            <Link to={"/postMission"}>
+                                <Dropdown.Item> Publicar misión </Dropdown.Item>
+                            </Link>
+                            
+                            <Link to={"/cancelMission"}>
+                                <Dropdown.Item> Cancelar misión </Dropdown.Item>
+                            </Link>
+
+                            <Link to={user === 'assassin' ? "/completeMission" : "/confirmMission"}>
+                                <Dropdown.Item>{user === 'assassin' ? 'Completar misión' : 'Confirmar misión'}</Dropdown.Item>
+                            </Link>
+                        
                         </div>
                     </Dropdown>
                     <Dropdown  className="rounded-lg" renderTrigger={() => 
@@ -60,28 +71,35 @@ export const NavBar = ({user} :  NavBarProps) => {
                         </button>}
                     >
                         <div className="bg-gray-800 text-white rounded-lg">
-                            <Link to={user === 'assassin' ? "/debtsAssassin" : "/formAssassin"}>
+                            <Link to={user === 'assassin' ? "/debtsRegister" : "/formAssassin"}>
                                 <Dropdown.Item>{user === 'assassin' ? 'Registrar deuda' : 'Registrar asesino'}</Dropdown.Item>
                             </Link>
         
-                            <Link to={"/history"}>
+                            <Link to={user === 'assassin' ? "/debtsConfirm" : "/history"}>
                                 <Dropdown.Item>{user === 'assassin' ? 'Confirmar deuda' : 'Historial de asesinos'}</Dropdown.Item>
                             </Link>
 
-                            <Link to={"/debtsHighTable"}>
+                            <Link to={user === 'assassin' ? "/debtsPayment" : "/debtsHighTable"}>
                                 <Dropdown.Item>{user === 'assassin' ? 'Pagar deuda' : 'Deudas entre asesinos' }</Dropdown.Item>
                             </Link>
                             {user === 'highTable' ? (
-                                <Dropdown.Item> Ubicar asesino </Dropdown.Item>
+                                <Link to={"/locateAssassin"}>
+                                    <Dropdown.Item> Ubicar asesino </Dropdown.Item>
+                                </Link>
                             ): null }
 
                         </div>
                     </Dropdown>
 
                     {user === 'assassin' ? (
-                        <>
-                            <button className='m-2 rounded-lg hover:bg-slate-700 focus:bg-slate-900 py-2 px-5'> Ubicar asesino </button>
-                            <button className='m-2 rounded-lg hover:bg-slate-700 focus:bg-slate-900 py-2 px-5'> Cambiar monedas </button> 
+                        <>  
+                            <Link to={"/locateAssassin"}>
+                                <button className='m-2 rounded-lg hover:bg-slate-700 focus:bg-slate-900 py-2 px-5'> Ubicar asesino </button>
+                            </Link>
+                            
+                            <Link to={"/changeCoins"}>
+                                <button className='m-2 rounded-lg hover:bg-slate-700 focus:bg-slate-900 py-2 px-5'> Cambiar monedas </button> 
+                            </Link>
                         </>
                     ): null }
                 </div>

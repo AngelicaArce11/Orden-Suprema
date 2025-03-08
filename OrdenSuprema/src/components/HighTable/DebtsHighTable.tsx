@@ -1,38 +1,33 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavBar } from "../../elements/NavBar";
 import { TableElement } from "../../elements/Table";
-
-
-const assassinDebts = [
-    { deudor: "John Doe", acreedor:"Marco", descripcion: "jdneknejden jdhkjasbdkasbd asdbjasbdk asdkebbefkhba dbjkhef mabsdkabkub jadbkedbkabed d", estado: "Completada" },
-    { deudor: "Jane Doe", acreedor:"Marco", descripcion: "behbfeek fkef", estado: "Completada" },
-    { deudor: "John Smith", acreedor:"Marco", descripcion: "dhbjhejhefb", estado: "incompleta" },
-  ];
+import axios from "axios";
 
 export const DebtsHighTable = () => {
-
+    const [debts, setDebts] = useState<Debt[]>([])
     const [filterCompleted, setFilterCompleted] = useState(false);
     const [filterNCompleted, setFilterNCompleted] = useState(false);
-    const [filteredAssassin, setFilteredAssassin] = useState(assassinDebts);
 
-    React.useEffect(() => {
+    // LLamado al backend para obtener las deudas
+    useEffect(() => {
+      axios.get("http://localhost:3000/debt")
+        .then(({ data }) => setDebts(data))
+        .catch(console.error);
+    }, []);
 
-        let filtered = assassinDebts;
-    
-        if (filterCompleted) {
-          filtered = filtered.filter((assassin) => 
-            assassin.estado.toLowerCase() === "completada"
-          );
-        }
-    
-        if (filterNCompleted) {
-          filtered = filtered.filter((assassin) => 
-            assassin.estado.toLowerCase() == "incompleta"
-          );
-        }
-    
-        setFilteredAssassin(filtered);
-      }, [filterCompleted, filterNCompleted, assassinDebts]);
+    // Filtro para aplicar los checkboxes
+    const filteredDebts = debts.filter(debt => {
+      if (filterCompleted && !debt.is_completed) 
+        return false;
+      if (filterNCompleted && debt.is_completed) 
+        return false;
+      return true;
+    });
+
+    // Obtener los campos necesarios para la visualización
+    const data = filteredDebts
+      .map(({ creditorId, debtorId, description, is_completed }) => 
+      [creditorId, debtorId, description, is_completed ? "Completada" : "Sin completar"])
 
     return (
       <>
@@ -72,7 +67,7 @@ export const DebtsHighTable = () => {
 
         {/* Tabla con los datos filtrados */}
         <div className='w-full pt-15 pr-4 pl-4 px-2 sm:px-30'>        
-            <TableElement header={['Nombre del objetivo', 'Descripción', 'Estado', 'Pago']} data={filteredAssassin} />
+            <TableElement header={['Nombre Deudor', 'Nombre Acreedor', 'Descripción', 'Estado']} data={data}  />
         </div>
         </>
     );

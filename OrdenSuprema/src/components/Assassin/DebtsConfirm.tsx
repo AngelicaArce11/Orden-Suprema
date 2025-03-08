@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { NavBar } from "../../elements/NavBar";
-import { TableElement } from "../../elements/Table2";
 import { Dropdown, DropdownItem } from "flowbite-react";
+import { TableElement } from "../../elements/Table2";
 
 
 const assassins = [
