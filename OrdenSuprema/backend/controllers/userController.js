@@ -66,7 +66,6 @@ const sendEmail = async (email, name, password) => {
         text: `¡Hola ${name}! \nEl registro de tu cuenta ha sido realizado. \nTu usuario es tu correo electrónico: ${email}. \nTu contraseña es: ${password}`,
     };
     await transporter.sendMail(emailData);
-    console.log(`Correo enviado a: ${email}`);
 };
 
 
