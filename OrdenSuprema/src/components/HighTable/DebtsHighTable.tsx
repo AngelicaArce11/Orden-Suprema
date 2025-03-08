@@ -45,8 +45,8 @@ export const DebtsHighTable = () => {
     // Obtener los campos necesarios para la visualización
     let data = filteredDebts
         .map(({ creditorId, debtorId, description, is_completed }) => [
-          names[creditorId],
           names[debtorId],
+          names[creditorId],
           description,
           is_completed ? "Completada" : "Sin completar"
       ]);
