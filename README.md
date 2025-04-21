@@ -14,6 +14,14 @@ La Orden Suprema es un proyecto de desarrollo web, ambientado en la saga de pel�
 - **Gestión de deudas:** Registro de deudas entre usuarios con descripción y valores específicos.
 - **Autenticación de usuarios:** Inicio de sesión con email y contraseña.
 
+## Tecnologías utilizadas:
+- TypeScript
+- JavaScript
+- React
+- Node
+- Sequelize
+- Supabase
+
 ## Requisitos
 - Node.js instalado
 
