@@ -21,6 +21,7 @@ La Orden Suprema es un proyecto de desarrollo web, ambientado en la saga de pel√
 - Node
 - Sequelize
 - Supabase
+- Tailwind
 
 ## Requisitos
 - Node.js instalado
