@@ -29,6 +29,7 @@ npm run dev
 Correr el  Back:
 ```sh
 cd OrdenSuprema
+cd backend
 npm run back
 ```
 
@@ -39,6 +40,7 @@ Para acceder con privilegios de administrador, puedes usar las siguientes creden
 
 Dentro de la aplicación podrás registrar usuarios Asesinos, y al correo de estos se le enviará las credenciales de acceso
 
+## Imágenes de muestra de algunas funcionalidades 
 ![image](https://github.com/user-attachments/assets/ce72aeca-8dc3-4c95-af0b-c198ed681e5f)
 
 ![image](https://github.com/user-attachments/assets/bd8a0e11-a592-4d0d-884b-a637befcd1b8)
